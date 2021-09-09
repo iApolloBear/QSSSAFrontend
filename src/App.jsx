@@ -1,5 +1,6 @@
 import { Navbar } from "./components/Layout/Navbar/Navbar";
 import { Images } from "./constants/Image";
+import { Inbox } from "./components/Home/Inbox";
 import "./styles/style.scss";
 
 function App() {
@@ -28,18 +29,14 @@ function App() {
                   <p>the learning system</p>
                 </div>
                 <div className="box-main">
-                  <div className="inbox">
-                    <figure>
-                      <img src={Images.teacher.default} />
-                    </figure>
-                    Enter as Teacher
-                  </div>
-                  <div className="inbox">
-                    <figure>
-                      <img src={Images.student.default} />
-                    </figure>
-                    Enter as Student
-                  </div>
+                  <Inbox
+                    text="Enter as Teacher"
+                    image={Images.teacher.default}
+                  />
+                  <Inbox
+                    text="Enter as Student"
+                    image={Images.student.default}
+                  />
                 </div>
               </div>
             </div>
