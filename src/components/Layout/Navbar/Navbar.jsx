@@ -1,4 +1,5 @@
 import { Images } from "../../../constants/Image";
+import { Link } from "react-router-dom";
 
 export const Navbar = () => {
   return (
@@ -7,11 +8,13 @@ export const Navbar = () => {
         <div className="row">
           <div className="col-md-12">
             <div className="header-wrap">
-              <p className="logo">QSSSA</p>
+              <Link to="/">
+                <p className="logo">QSSSA</p>
+              </Link>
 
               <div className="user-info">
                 <figure>
-                  <img src={Images.person.default} />
+                  <img src={Images.person.default} alt="nav-person-icon" />
                 </figure>
                 <div>
                   <span className="designation">Prof.</span>
