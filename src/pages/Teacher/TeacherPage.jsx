@@ -1,4 +1,4 @@
-import { QSSSAForm } from "../components/Teacher/QSSSAForm";
+import { QSSSAForm } from "../../components/Teacher/QSSSAForm";
 
 export const TeacherPage = () => {
   return (

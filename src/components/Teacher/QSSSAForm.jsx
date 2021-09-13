@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { fetchWithoutToken } from "../../helpers/fetch";
+import { useHistory } from "react-router-dom";
 
 const schema = yup.object().shape({
   topic: yup.string().required(),
@@ -8,6 +10,7 @@ const schema = yup.object().shape({
 });
 
 export const QSSSAForm = () => {
+  const history = useHistory();
   const {
     register,
     handleSubmit,
@@ -16,7 +19,13 @@ export const QSSSAForm = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async (data) => {
+    const resp = await fetchWithoutToken("qsssa", data, "POST");
+    const {
+      qsssa: { accessCode },
+    } = await resp.json();
+    history.push(`/shareCode/${accessCode}`);
+  };
 
   return (
     <div className="form-main">

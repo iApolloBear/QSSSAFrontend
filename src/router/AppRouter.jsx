@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Navbar } from "../components/Layout/Navbar/Navbar";
 import { HomePage } from "../pages/HomePage";
-import { TeacherPage } from "../pages/TeacherPage";
+import { TeacherPage } from "../pages/Teacher/TeacherPage";
+import { ShareCodePage } from "../pages/Teacher/ShareCodePage";
 import { StudentPage } from "../pages/StudentPage";
 
 export const AppRouter = () => {
@@ -11,6 +12,7 @@ export const AppRouter = () => {
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/teacher" component={TeacherPage} />
+        <Route exact path="/shareCode/:id" component={ShareCodePage} />
         <Route exact path="/student" component={StudentPage} />
       </Switch>
     </Router>
