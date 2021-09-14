@@ -40,7 +40,7 @@ export const GroupPage = () => {
             <div className="col-md-6 col-lg-6">
               <div className="form-main multi-group">
                 <div className="form-wrap">
-                  <h2 className="h5"></h2>
+                  <h2 className="h5">&nbsp;</h2>
                   <div className="inner-box">
                     <table>
                       <thead>
@@ -54,12 +54,12 @@ export const GroupPage = () => {
                         <tr>
                           <td>{name}</td>
                           <td>
-                            <a href="#">
+                            <button>
                               <span>
                                 <i className="fas fa-microphone" />
                                 Record
                               </span>
-                            </a>
+                            </button>
                           </td>
                           <td>
                             <button className="btn btn-small btn-primary">
