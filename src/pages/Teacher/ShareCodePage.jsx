@@ -1,10 +1,15 @@
 import { useEffect, useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchWithoutToken } from "../../helpers/fetch";
+import { ShareLinkModal } from "../../components/Teacher/ShareLinkModal";
 
 export const ShareCodePage = () => {
   const { id } = useParams();
   const [qsssa, setQSSSA] = useState({});
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const getQSSSA = useCallback(async (id) => {
     const fetchQSSSA = await fetchWithoutToken(`qsssa/${id}`);
@@ -33,13 +38,22 @@ export const ShareCodePage = () => {
                     <div className="tag">{id.slice(0, 6)}</div>
                   </div>
                   <div>
-                    <button type="button" className="btn btn-primary">
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={handleShow}
+                    >
                       Share link
                     </button>
                     <button type="button" className="btn btn-primary">
                       Create groups
                     </button>
                   </div>
+                  <ShareLinkModal
+                    show={show}
+                    handleClose={handleClose}
+                    id={id}
+                  />
                 </>
               ) : (
                 <h1>
