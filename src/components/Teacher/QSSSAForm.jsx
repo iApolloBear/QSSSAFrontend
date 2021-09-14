@@ -20,10 +20,9 @@ export const QSSSAForm = () => {
   });
 
   const onSubmit = async (data) => {
-    const resp = await fetchWithoutToken("qsssa", data, "POST");
     const {
       qsssa: { accessCode },
-    } = await resp.json();
+    } = await fetchWithoutToken("qsssa", data, "POST");
     history.push(`/shareCode/${accessCode}`);
   };
 

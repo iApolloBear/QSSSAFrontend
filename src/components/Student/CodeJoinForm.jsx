@@ -1,12 +1,28 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 import Picker from "emoji-picker-react";
+import { fetchWithoutToken } from "../../helpers/fetch";
+import { useHistory } from "react-router-dom";
 
-export const CodeJoinForm = ({ qsssa: { topic } }) => {
+export const CodeJoinForm = ({ qsssa: { topic, accessCode } }) => {
   const [emoji, setEmoji] = useState(false);
-  const [name, setName] = useState("");
+  const { name, setName } = useContext(UserContext);
+  const history = useHistory();
 
   const onChange = ({ target }) => setName(target.value);
   const onEmojiClick = (e, { emoji }) => setName(`${name}${emoji}`);
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const resp = await fetchWithoutToken(
+      "students",
+      { name, qsssaId: accessCode },
+      "POST"
+    );
+    if (resp.ok) {
+      history.push(`/student/grouppage/${accessCode}`);
+    }
+  };
 
   return (
     <div className="bottom-show">
@@ -16,7 +32,7 @@ export const CodeJoinForm = ({ qsssa: { topic } }) => {
         <h5>Topic: {topic}</h5>
       </div>
       <div className="form-main p-0">
-        <form>
+        <form onSubmit={onSubmit}>
           <div className="form-wrap">
             <div className="input-group">
               <input

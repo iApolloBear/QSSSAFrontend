@@ -2,6 +2,7 @@ import { useEffect, useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchWithoutToken } from "../../helpers/fetch";
 import { ShareLinkModal } from "../../components/Teacher/ShareLinkModal";
+import { Link } from "react-router-dom";
 
 export const ShareCodePage = () => {
   const { id } = useParams();
@@ -45,9 +46,13 @@ export const ShareCodePage = () => {
                     >
                       Share link
                     </button>
-                    <button type="button" className="btn btn-primary">
+                    <Link
+                      to={`/studentlist/${id}`}
+                      type="button"
+                      className="btn btn-primary"
+                    >
                       Create groups
-                    </button>
+                    </Link>
                   </div>
                   <ShareLinkModal
                     show={show}

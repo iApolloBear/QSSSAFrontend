@@ -12,13 +12,19 @@ export const fetchWithoutToken = async (endpoint, data, method = "GET") => {
       status: resp.status,
     };
   } else {
-    return fetch(url, {
+    const resp = await fetch(url, {
       method,
       headers: {
         "Content-type": "application/json",
       },
       body: JSON.stringify(data),
     });
+    const body = await resp.json();
+    return {
+      ...body,
+      ok: resp.ok,
+      status: resp.status,
+    };
   }
 };
 

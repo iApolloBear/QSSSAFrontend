@@ -1,0 +1,31 @@
+.custom-input {
+  position: relative;
+
+  &__input::webkit-inner-spin-button {
+    opacity: 0 !important;
+  }
+
+  .btn {
+    border-radius: 0px;
+    position: absolute;
+    height: 50%;
+    width: 50px;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    right: 0;
+  }
+
+  .btn-small {
+    font-size: 15px;
+  }
+
+  &__more-button {
+    top: 0;
+  }
+
+  &__less-button {
+    bottom: 0;
+  }
+}

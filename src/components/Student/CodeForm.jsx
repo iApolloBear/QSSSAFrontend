@@ -55,7 +55,7 @@ export const CodeForm = () => {
                 <button type="submit" className="btn btn-small btn-primary">
                   {loading ? (
                     <span
-                      class="spinner-border spinner-border-sm"
+                      className="spinner-border spinner-border-sm"
                       role="status"
                       aria-hidden="true"
                     ></span>
