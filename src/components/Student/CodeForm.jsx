@@ -20,8 +20,10 @@ export const CodeForm = () => {
   });
   const [qsssa, setQSSSA] = useState({});
   const [join, setJoin] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async ({ code }) => {
+    setLoading(true);
     const resp = await fetchWithoutToken(`qsssa/${code}`);
     if (!resp.ok) {
       setError("code", {
@@ -33,6 +35,7 @@ export const CodeForm = () => {
       setQSSSA(resp.qsssa);
       setJoin(true);
     }
+    setLoading(false);
   };
 
   return (
@@ -50,11 +53,15 @@ export const CodeForm = () => {
               />
               <div className="input-group-append">
                 <button type="submit" className="btn btn-small btn-primary">
-                  {/* <span
-                        class="spinner-border spinner-border-sm"
-                        role="status"
-                        aria-hidden="true"></span>*/}
-                  Go!
+                  {loading ? (
+                    <span
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                  ) : (
+                    "Go!"
+                  )}
                 </button>
               </div>
             </div>
