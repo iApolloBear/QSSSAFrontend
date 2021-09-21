@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-export const CreateGroupModal = ({ show, handleClose, id }) => {
+export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
   const [number, setNumber] = useState(0);
 
   const more = () => setNumber(number + 1);
@@ -44,10 +44,15 @@ export const CreateGroupModal = ({ show, handleClose, id }) => {
                 value={`Group ${i + 1}`}
               />
             ))}
-          <input type="checkbox" /> Allow students to know who is in their group
-          before they record.
-          <br />
-          <input type="checkbox" /> Allow students to rerecord their answers.
+          {onlyRecording && (
+            <>
+              <input type="checkbox" /> Allow students to know who is in their
+              group before they record.
+              <br />
+              <input type="checkbox" /> Allow students to rerecord their
+              answers.
+            </>
+          )}
         </div>
       </Modal.Body>
       <Modal.Footer className="justify-content-center button-sm border-0">

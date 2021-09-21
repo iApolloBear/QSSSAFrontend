@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 const schema = yup.object().shape({
   topic: yup.string().required(),
   question: yup.string().required(),
+  onlyRecording: yup.boolean().required(),
 });
 
 export const QSSSAForm = () => {
@@ -55,7 +56,19 @@ export const QSSSAForm = () => {
             placeholder="Enter your Sentence Stem"
             {...register("sentenceStem")}
           />
-          <label htmlFor="qsssa-image" className="btn btn-primary">
+          <div className="form-check">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              id="onlyRecording"
+              placeholder="Enter your Sentence Stem"
+              {...register("onlyRecording")}
+            />
+            <label className="form-check-label" for="onlyRecording">
+              Recording audio only
+            </label>
+          </div>
+          <label htmlFor="qsssa-image" className="btn mt-3 btn-primary">
             <input className="d-none" type="file" name="" id="qsssa-image" />
             Upload image
           </label>

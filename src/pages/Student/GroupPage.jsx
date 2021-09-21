@@ -2,11 +2,13 @@ import { useEffect, useCallback, useState, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import { useParams } from "react-router-dom";
 import { fetchWithoutToken } from "../../helpers/fetch";
+import useRecorder from "../../hooks/useRecorder";
 
 export const GroupPage = () => {
   const { id } = useParams();
   const [qsssa, setQSSSA] = useState({});
   const { name } = useContext(UserContext);
+  const [audioURL, isRecording, startRecording, stopRecording] = useRecorder();
 
   const getQSSSA = useCallback(async (id) => {
     const fetchQSSSA = await fetchWithoutToken(`qsssa/${id}`);
@@ -33,6 +35,7 @@ export const GroupPage = () => {
                   <div className="questions-custom">
                     <p>While you are waiting think about this question: </p>
                     <h6>Question: {qsssa.qsssa?.question}</h6>
+                    <audio src={audioURL} controls />
                   </div>
                 </div>
               </div>
@@ -54,12 +57,32 @@ export const GroupPage = () => {
                         <tr>
                           <td>{name}</td>
                           <td>
-                            <button>
-                              <span>
-                                <i className="fas fa-microphone" />
-                                Record
-                              </span>
-                            </button>
+                            {isRecording ? (
+                              <button
+                                onClick={stopRecording}
+                                class="btn btn-sm btn-primary"
+                              >
+                                <span>
+                                  <i className="fas fa-microphone" />
+                                  Stop
+                                </span>
+                              </button>
+                            ) : (
+                              <button
+                                onClick={startRecording}
+                                class="btn btn-sm btn-primary"
+                              >
+                                <span>
+                                  <i className="fas fa-microphone" />
+                                  Record
+                                </span>
+                              </button>
+                            )}
+                            {audioURL && (
+                              <button className="btn btn-sm btn-primary mt-2">
+                                Submit
+                              </button>
+                            )}
                           </td>
                           <td>
                             <button className="btn btn-small btn-primary">

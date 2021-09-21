@@ -48,7 +48,12 @@ export const StudentListPage = () => {
                 >
                   Click to create group
                 </button>
-                <CreateGroupModal id={id} show={show} handleClose={handleClose} />
+                <CreateGroupModal
+                  onlyRecording={qsssa.qsssa?.onlyRecording}
+                  id={id}
+                  show={show}
+                  handleClose={handleClose}
+                />
               </div>
             </div>
           </div>

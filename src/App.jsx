@@ -5,7 +5,7 @@ import "./styles/style.scss";
 function App() {
   return (
     <UserProvider>
-      <AppRouter />;
+      <AppRouter />
     </UserProvider>
   );
 }
