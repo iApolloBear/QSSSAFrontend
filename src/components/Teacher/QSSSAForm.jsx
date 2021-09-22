@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -12,6 +13,7 @@ const schema = yup.object().shape({
 
 export const QSSSAForm = () => {
   const history = useHistory();
+  const [imgPreview, setImgPreview] = useState(null);
   const {
     register,
     handleSubmit,
@@ -21,9 +23,16 @@ export const QSSSAForm = () => {
   });
 
   const onSubmit = async (data) => {
+    const formData = new FormData();
+    for (const key of Object.keys(data)) {
+      formData.append(key, data[key]);
+    }
+    if (imgPreview) {
+      formData.append("img", imgPreview);
+    }
     const {
       qsssa: { accessCode },
-    } = await fetchWithoutToken("qsssa", data, "POST");
+    } = await fetchWithoutToken("qsssa", formData, "POST", true);
     history.push(`/shareCode/${accessCode}`);
   };
 
@@ -69,9 +78,22 @@ export const QSSSAForm = () => {
             </label>
           </div>
           <label htmlFor="qsssa-image" className="btn mt-3 btn-primary">
-            <input className="d-none" type="file" name="" id="qsssa-image" />
+            <input
+              className="d-none"
+              type="file"
+              name=""
+              accept=".png,.jpg,.jpeg"
+              id="qsssa-image"
+              onChange={(e) => setImgPreview(e.target.files[0])}
+            />
             Upload image
           </label>
+          {imgPreview && (
+            <img
+              className="img-fluid mt-4"
+              src={URL.createObjectURL(imgPreview)}
+            />
+          )}
         </div>
         <div className="btn-main">
           <button type="submit" className="btn btn-primary">

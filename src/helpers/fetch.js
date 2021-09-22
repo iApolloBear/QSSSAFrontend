@@ -1,6 +1,11 @@
 const baseUrl = process.env.REACT_APP_API_URL;
 
-export const fetchWithoutToken = async (endpoint, data, method = "GET") => {
+export const fetchWithoutToken = async (
+  endpoint,
+  data,
+  method = "GET",
+  formData = false
+) => {
   const url = `${baseUrl}/${endpoint}`;
 
   if (method === "GET") {
@@ -14,10 +19,12 @@ export const fetchWithoutToken = async (endpoint, data, method = "GET") => {
   } else {
     const resp = await fetch(url, {
       method,
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(data),
+      headers: formData
+        ? {}
+        : {
+            "Content-type": "application/json",
+          },
+      body: formData ? data : JSON.stringify(data),
     });
     const body = await resp.json();
     return {
