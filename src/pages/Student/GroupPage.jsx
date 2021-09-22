@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useState, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import { useParams } from "react-router-dom";
-import { fetchWithoutToken } from "../../helpers/fetch";
+import { fetchWithoutToken, baseUrl } from "../../helpers/fetch";
 import useRecorder from "../../hooks/useRecorder";
 
 export const GroupPage = () => {
@@ -10,6 +10,7 @@ export const GroupPage = () => {
   const { name } = useContext(UserContext);
   const [users, setUsers] = useState(false);
   const [audioURL, isRecording, startRecording, stopRecording] = useRecorder();
+  const [commentView, setCommentView] = useState("");
 
   const getQSSSA = useCallback(async (id) => {
     const fetchQSSSA = await fetchWithoutToken(`qsssa/${id}`);
@@ -32,6 +33,13 @@ export const GroupPage = () => {
             <div className="col-lg-12">
               <div className="justify-content-center row">
                 <div className="col-lg-6">
+                  {qsssa.qsssa?.img && (
+                    <img
+                      className="img-fluid mb-5"
+                      src={`${baseUrl}/upload/qsssas/${id}`}
+                      alt={`${qsssa}`}
+                    />
+                  )}
                   <div className="questions-custom">
                     <p>While you are waiting think about this question: </p>
                     <h6>Question: {qsssa.qsssa?.question}</h6>
@@ -45,20 +53,38 @@ export const GroupPage = () => {
                 <div className="form-wrap">
                   <h2 className="h5">&nbsp;</h2>
                   <div className="inner-box">
-                    <table className="mb-5">
-                      <tbody>
-                        {users &&
-                          qsssa.qsssa?.users &&
-                          qsssa.qsssa.users
-                            .filter((user) => user.name !== name)
-                            .map((user) => (
-                              <tr>
-                                <td>{user.name}</td>
-                                <td></td>
-                              </tr>
-                            ))}
-                      </tbody>
-                    </table>
+                    <ul className="mb-5 list-group">
+                      {users &&
+                        qsssa.qsssa?.users &&
+                        qsssa.qsssa.users
+                          .filter((user) => user.name !== name)
+                          .map((user) => (
+                            <div className="list-group-item ">
+                              <div className="d-flex justify-content-between">
+                                <div>{user.name}</div>
+                                <div>
+                                  <i
+                                    style={{ cursor: "pointer" }}
+                                    className="far fa-thumbs-up mx-2"
+                                  ></i>
+                                  <i
+                                    style={{ cursor: "pointer" }}
+                                    className="far fa-comment-alt"
+                                    onClick={() => setCommentView(user._id)}
+                                  ></i>
+                                </div>
+                              </div>
+                              {commentView === user._id && (
+                                <div className="mt-2">
+                                  <input
+                                    className="form-control"
+                                    placeholder="Type a comment"
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                    </ul>
                     <table>
                       <thead>
                         <tr>
