@@ -4,9 +4,20 @@ import { Link } from "react-router-dom";
 
 export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
   const [number, setNumber] = useState(0);
+  const [option, setOption] = useState("random");
+
+  const onChange = ({ target }) => setOption(target.id);
 
   const more = () => setNumber(number + 1);
   const less = () => setNumber(number - 1);
+  const options = [
+    "Longest hair",
+    "Shortest hair",
+    "Brightest shirt",
+    "Tallest",
+    "Shortest",
+    "Darkest shoes",
+  ];
 
   return (
     <Modal show={show} onHide={handleClose}>
@@ -38,6 +49,7 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
           {number > 0 &&
             [...Array(number)].map((item, i) => (
               <input
+                key={i}
                 className="form-control"
                 type="text"
                 placeholder={`Group ${i + 1} name`}
@@ -46,13 +58,69 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
             ))}
           {onlyRecording && (
             <>
-              <input type="checkbox" /> Allow students to know who is in their
-              group before they record.
+              <input className="my-2" type="checkbox" /> Allow students to know
+              who is in their group before they record.
               <br />
-              <input type="checkbox" /> Allow students to rerecord their
-              answers.
+              <input className="my-2" type="checkbox" /> Allow students to
+              rerecord their answers.
+              <br />
             </>
           )}
+          <div className="form-check mt-2">
+            <input
+              className="form-check-input"
+              type="radio"
+              name="flexRadioDefault"
+              id="identifiers"
+              checked={option === "identifiers"}
+              onChange={onChange}
+            />
+            <label
+              style={{ position: "relative", top: "4px" }}
+              className="form-check-label"
+              htmlFor="flexRadioDefault1"
+            >
+              Determine who speaks first based on identifiers
+            </label>
+          </div>
+          {option === "identifiers" &&
+            options.map((item, i) => (
+              <div key={i} className="mx-4 my-3">
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="option"
+                    id="random"
+                  />
+                  <label
+                    style={{ position: "relative", top: "4px" }}
+                    className="form-check-label"
+                    htmlFor="flexRadioDefault2"
+                  >
+                    {item}
+                  </label>
+                </div>
+              </div>
+            ))}
+          <input className="form-control mx-4 my-3" placeholder="Other" />
+          <div className="form-check">
+            <input
+              className="form-check-input"
+              type="radio"
+              name="flexRadioDefault"
+              id="random"
+              checked={option === "random"}
+              onChange={onChange}
+            />
+            <label
+              style={{ position: "relative", top: "4px" }}
+              className="form-check-label"
+              htmlFor="flexRadioDefault2"
+            >
+              Randomly assign group member to speak first
+            </label>
+          </div>
         </div>
       </Modal.Body>
       <Modal.Footer className="justify-content-center button-sm border-0">

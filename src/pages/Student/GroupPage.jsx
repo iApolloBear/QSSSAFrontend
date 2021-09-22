@@ -8,11 +8,11 @@ export const GroupPage = () => {
   const { id } = useParams();
   const [qsssa, setQSSSA] = useState({});
   const { name } = useContext(UserContext);
+  const [users, setUsers] = useState(false);
   const [audioURL, isRecording, startRecording, stopRecording] = useRecorder();
 
   const getQSSSA = useCallback(async (id) => {
     const fetchQSSSA = await fetchWithoutToken(`qsssa/${id}`);
-    console.log(fetchQSSSA);
     setQSSSA(fetchQSSSA);
   }, []);
 
@@ -45,6 +45,20 @@ export const GroupPage = () => {
                 <div className="form-wrap">
                   <h2 className="h5">&nbsp;</h2>
                   <div className="inner-box">
+                    <table className="mb-5">
+                      <tbody>
+                        {users &&
+                          qsssa.qsssa?.users &&
+                          qsssa.qsssa.users
+                            .filter((user) => user.name !== name)
+                            .map((user) => (
+                              <tr>
+                                <td>{user.name}</td>
+                                <td></td>
+                              </tr>
+                            ))}
+                      </tbody>
+                    </table>
                     <table>
                       <thead>
                         <tr>
@@ -60,7 +74,7 @@ export const GroupPage = () => {
                             {isRecording ? (
                               <button
                                 onClick={stopRecording}
-                                class="btn btn-sm btn-primary"
+                                className="btn btn-sm btn-primary"
                               >
                                 <span>
                                   <i className="fas fa-microphone" />
@@ -70,7 +84,7 @@ export const GroupPage = () => {
                             ) : (
                               <button
                                 onClick={startRecording}
-                                class="btn btn-sm btn-primary"
+                                className="btn btn-sm btn-primary"
                               >
                                 <span>
                                   <i className="fas fa-microphone" />
@@ -85,7 +99,10 @@ export const GroupPage = () => {
                             )}
                           </td>
                           <td>
-                            <button className="btn btn-small btn-primary">
+                            <button
+                              onClick={() => setUsers(true)}
+                              className="btn btn-small btn-primary"
+                            >
                               Ready to answer
                             </button>
                           </td>

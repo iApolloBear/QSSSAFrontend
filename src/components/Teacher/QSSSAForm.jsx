@@ -92,6 +92,7 @@ export const QSSSAForm = () => {
             <img
               className="img-fluid mt-4"
               src={URL.createObjectURL(imgPreview)}
+              alt="qsssa-preview"
             />
           )}
         </div>

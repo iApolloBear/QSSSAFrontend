@@ -24,7 +24,7 @@ export const StudentListPage = () => {
     <main>
       <div className="container">
         <div className="d-flex justify-content-between top-title-main">
-          <p></p>
+          <p>{qsssa.qsssa?.question}</p>
           <p>Topic: {qsssa.qsssa?.topic}</p>
         </div>
         <div className="justify-content-center row">
@@ -35,7 +35,7 @@ export const StudentListPage = () => {
                   <ul>
                     <li>Student Name</li>
                     {qsssa.qsssa?.users.map((user) => (
-                      <li>{user.name}</li>
+                      <li key={user._id}>{user.name}</li>
                     ))}
                   </ul>
                 </div>
