@@ -5,19 +5,23 @@ export const useSocket = (serverPath) => {
   const [socket, setSocket] = useState(null);
   const [online, setOnline] = useState(false);
 
-  const connectSocket = useCallback(() => {
-    const token = localStorage.getItem("token");
+  const connectSocket = useCallback(
+    (path = "") => {
+      const token = localStorage.getItem("token");
 
-    const socketTemp = io.connect(serverPath, {
-      transports: ["websocket"],
-      autoConnect: true,
-      forceNew: true,
-      query: {
-        "x-token": token,
-      },
-    });
-    setSocket(socketTemp);
-  }, [serverPath]);
+      const socketTemp = io.connect(serverPath, {
+        transports: ["websocket"],
+        autoConnect: true,
+        forceNew: true,
+        query: {
+          "x-token": token,
+          path,
+        },
+      });
+      setSocket(socketTemp);
+    },
+    [serverPath]
+  );
 
   const disconnectSocket = useCallback(() => {
     socket?.disconnect();

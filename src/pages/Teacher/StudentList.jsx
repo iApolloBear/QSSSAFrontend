@@ -1,5 +1,6 @@
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
+import { useSocket } from "../../hooks/useSocket";
 import { fetchWithoutToken } from "../../helpers/fetch";
 import { CreateGroupModal } from "../../components/Teacher/CreateGroupModal";
 
@@ -7,6 +8,7 @@ export const StudentListPage = () => {
   const { id } = useParams();
   const [qsssa, setQSSSA] = useState({});
   const [show, setShow] = useState(false);
+  const { connectSocket } = useSocket("http://localhost:4000");
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -18,7 +20,8 @@ export const StudentListPage = () => {
 
   useEffect(() => {
     getQSSSA(id);
-  }, [getQSSSA, id]);
+    connectSocket(id);
+  }, [getQSSSA, id, connectSocket]);
 
   return (
     <main>

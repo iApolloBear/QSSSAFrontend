@@ -34,6 +34,11 @@ export const AuthProvider = ({ children }) => {
     return resp.msg;
   };
 
+  const logout = () => {
+    localStorage.removeItem("token");
+    setAuth({ ...initialState, checking: false });
+  };
+
   const verifyToken = useCallback(async () => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -58,7 +63,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ auth, register, verifyToken }}>
+    <AuthContext.Provider value={{ auth, register, verifyToken, logout }}>
       {children}
     </AuthContext.Provider>
   );
