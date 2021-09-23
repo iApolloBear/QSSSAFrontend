@@ -1,7 +1,13 @@
+import { useContext } from "react";
+import { AuthContext } from "../../../context/AuthContext";
 import { Images } from "../../../constants/Image";
 import { Link } from "react-router-dom";
 
 export const Navbar = () => {
+  const {
+    auth: { name },
+  } = useContext(AuthContext);
+
   return (
     <header>
       <div className="container">
@@ -17,8 +23,10 @@ export const Navbar = () => {
                   <img src={Images.person.default} alt="nav-person-icon" />
                 </figure>
                 <div>
-                  <span className="designation">Prof.</span>
-                  <span className="d-block">Charles</span>
+                  {/*
+                   *<span className="designation">Prof.</span>
+                   */}
+                  {name && <span className="d-block">{name}</span>}
                 </div>
               </div>
             </div>

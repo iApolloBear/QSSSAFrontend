@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useState, useContext } from "react";
-import { UserContext } from "../../context/UserContext";
+import { AuthContext } from "../../context/AuthContext";
 import { useParams } from "react-router-dom";
 import { fetchWithoutToken, baseUrl } from "../../helpers/fetch";
 import useRecorder from "../../hooks/useRecorder";
@@ -7,7 +7,9 @@ import useRecorder from "../../hooks/useRecorder";
 export const GroupPage = () => {
   const { id } = useParams();
   const [qsssa, setQSSSA] = useState({});
-  const { name } = useContext(UserContext);
+  const {
+    auth: { name },
+  } = useContext(AuthContext);
   const [users, setUsers] = useState(false);
   const [audioURL, isRecording, startRecording, stopRecording] = useRecorder();
   const [commentView, setCommentView] = useState("");

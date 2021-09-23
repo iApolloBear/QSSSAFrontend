@@ -1,4 +1,6 @@
+import { useContext, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 import { Navbar } from "../components/Layout/Navbar/Navbar";
 import { HomePage } from "../pages/HomePage";
 import { TeacherPage } from "../pages/Teacher/TeacherPage";
@@ -10,6 +12,16 @@ import { StudentListPage } from "../pages/Teacher/StudentList";
 import { GroupPage as TeacherGroupPage } from "../pages/Teacher/GroupPage";
 
 export const AppRouter = () => {
+  const { auth, verifyToken } = useContext(AuthContext);
+
+  useEffect(() => {
+    verifyToken();
+  }, [verifyToken]);
+
+  if (auth.checking) {
+    return <h1>Loading...</h1>;
+  }
+
   return (
     <Router>
       <Navbar />
