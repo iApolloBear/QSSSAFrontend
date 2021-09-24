@@ -8,6 +8,7 @@ const initialState = {
   checking: true,
   logged: false,
   name: null,
+  qsssa: null,
 };
 
 export const AuthProvider = ({ children }) => {
@@ -28,6 +29,7 @@ export const AuthProvider = ({ children }) => {
         name: student.name,
         checking: false,
         logged: true,
+        qsssa: student.qsssa.accessCode,
       });
       return resp.ok;
     }
@@ -54,6 +56,7 @@ export const AuthProvider = ({ children }) => {
         name: student.name,
         checking: false,
         logged: true,
+        qsssa: student.qsssa.accessCode,
       });
 
       return resp.ok;
