@@ -3,12 +3,16 @@ import { useParams } from "react-router-dom";
 import { useSocket } from "../../hooks/useSocket";
 import { fetchWithoutToken } from "../../helpers/fetch";
 import { CreateGroupModal } from "../../components/Teacher/CreateGroupModal";
+import { StudentsContext } from "../../context/students/StudentsContext";
 
 export const StudentListPage = () => {
   const { id } = useParams();
   const [qsssa, setQSSSA] = useState({});
   const [show, setShow] = useState(false);
   const { connectSocket } = useSocket("http://localhost:4000");
+  const {
+    studentsState: { students },
+  } = useContext(StudentsContext);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -20,8 +24,11 @@ export const StudentListPage = () => {
 
   useEffect(() => {
     getQSSSA(id);
+  }, [getQSSSA, id]);
+
+  useEffect(() => {
     connectSocket(id);
-  }, [getQSSSA, id, connectSocket]);
+  }, [connectSocket, id]);
 
   return (
     <main>
@@ -37,7 +44,7 @@ export const StudentListPage = () => {
                 <div className="inner-box">
                   <ul>
                     <li>Student Name</li>
-                    {qsssa.qsssa?.users.map((user) => (
+                    {students?.map((user) => (
                       <li key={user._id}>{user.name}</li>
                     ))}
                   </ul>

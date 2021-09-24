@@ -1,9 +1,12 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 import io from "socket.io-client";
+import { StudentsContext } from "../context/students/StudentsContext";
+import { types } from "../types/types";
 
 export const useSocket = (serverPath) => {
   const [socket, setSocket] = useState(null);
   const [online, setOnline] = useState(false);
+  const { dispatch } = useContext(StudentsContext);
 
   const connectSocket = useCallback(
     (path = "") => {
@@ -38,6 +41,12 @@ export const useSocket = (serverPath) => {
   useEffect(() => {
     socket?.on("disconnect", () => setOnline(false));
   }, [socket]);
+
+  useEffect(() => {
+    socket?.on("list-users", (users) => {
+      dispatch({ type: types.studentsLoaded, payload: users });
+    });
+  }, [socket, dispatch]);
 
   return {
     socket,

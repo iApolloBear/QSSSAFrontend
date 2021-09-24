@@ -2,14 +2,17 @@ import { AppRouter } from "./router/AppRouter";
 import { AuthProvider } from "./context/AuthContext";
 import { SocketProvider } from "./context/SocketContext";
 import "./styles/style.scss";
+import { StudentsProvider } from "./context/students/StudentsContext";
 
 function App() {
   return (
-    <AuthProvider>
-      <SocketProvider>
-        <AppRouter />
-      </SocketProvider>
-    </AuthProvider>
+    <StudentsProvider>
+      <AuthProvider>
+        <SocketProvider>
+          <AppRouter />
+        </SocketProvider>
+      </AuthProvider>
+    </StudentsProvider>
   );
 }
 

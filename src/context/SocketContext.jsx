@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect } from "react";
 import { useSocket } from "../hooks/useSocket";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "./AuthContext";
 
 export const SocketContext = createContext();
 
@@ -12,7 +12,7 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (auth.logged) {
-      connectSocket();
+      connectSocket(auth.qsssa);
     }
   }, [auth, connectSocket]);
 
