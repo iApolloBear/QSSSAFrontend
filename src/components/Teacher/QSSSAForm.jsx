@@ -73,7 +73,7 @@ export const QSSSAForm = () => {
               placeholder="Enter your Sentence Stem"
               {...register("onlyRecording")}
             />
-            <label className="form-check-label" for="onlyRecording">
+            <label className="form-check-label" htmlFor="onlyRecording">
               Recording audio only
             </label>
           </div>

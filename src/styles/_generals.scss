@@ -620,10 +620,19 @@ button {
   div {
     display: inline-block;
   }
+  button.btn.btn-small.rec-button {
+    padding: 0px 5px;
+    font-size: 14px;
+    border-radius: 3px;
+    border: none;
+    background: transparent;
+  }
+
   button.btn.btn-small {
     padding: 0px 5px;
     font-size: 14px;
     border-radius: 3px;
+    border: none;
   }
 }
 

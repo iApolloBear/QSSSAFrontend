@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { fetchWithoutToken } from "../../helpers/fetch";
 
 export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
+  const history = useHistory();
   const [groups, setGroups] = useState([]);
   const [option, setOption] = useState("random");
 
@@ -23,6 +25,21 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
     const newArr = [...groups];
     newArr[index] = value;
     setGroups(newArr);
+  };
+
+  const createGroups = async () => {
+    const resp = await fetchWithoutToken(
+      "groups",
+      {
+        qsssaId: id,
+        groups,
+      },
+      "POST"
+    );
+
+    if (resp.ok) {
+      history.push(`/teacher/group/${id}`);
+    }
   };
 
   return (
@@ -134,9 +151,9 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
         </div>
       </Modal.Body>
       <Modal.Footer className="justify-content-center button-sm border-0">
-        <Link to={`/teacher/grouppage/${id}`} className="btn btn-primary">
+        <button onClick={createGroups} className="btn btn-primary">
           Create groups
-        </Link>
+        </button>
       </Modal.Footer>
     </Modal>
   );

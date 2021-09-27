@@ -17,18 +17,42 @@ export const GroupPage = () => {
 
   return (
     <main>
-      <div className="container">
-        <div className="d-flex justify-content-between top-title-main">
-          <p></p>
-          <p>Topic: {qsssa.qsssa?.topic}</p>
-        </div>
-        <div className="justify-content-center row">
-          <div className="col-lg-7">
-            <div className="form-main">
-              <div className="form-wrap">
-                <div className="inner-box"></div>
+      <div className="grp-main">
+        <div className="container">
+          <div className="d-flex justify-content-between top-title-main">
+            <p>{id}</p>
+            <p>Topic: {qsssa.qsssa?.topic}</p>
+          </div>
+          <div className="row">
+            {qsssa.qsssa?.groups.map((group) => (
+              <div key={group._id} className="col-md-6 col-lg-6">
+                <div className="form-main multi-group">
+                  <div className="form-wrap">
+                    <h2 className="h5">{group.name}</h2>
+                    <div className="inner-box">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Student Name:</th>
+                            <th>Record Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {group.users.map((user) => (
+                            <tr key={user._id}>
+                              <td>{user.name}</td>
+                              <td>
+                                <i className="far fa-play-circle"></i>Pending
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

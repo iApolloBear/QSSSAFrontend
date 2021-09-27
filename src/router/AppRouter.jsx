@@ -33,11 +33,7 @@ export const AppRouter = () => {
         <Route exact path="/student/code/:id" component={StudentCode} />
         <Route exact path="/student/grouppage/:id" component={GroupPage} />
         <Route exact path="/studentlist/:id" component={StudentListPage} />
-        <Route
-          exact
-          path="/teacher/grouppage/:id"
-          component={TeacherGroupPage}
-        />
+        <Route exact path="/teacher/group/:id" component={TeacherGroupPage} />
       </Switch>
     </Router>
   );

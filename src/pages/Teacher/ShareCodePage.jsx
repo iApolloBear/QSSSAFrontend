@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchWithoutToken } from "../../helpers/fetch";
+import { fetchWithoutToken, baseUrl } from "../../helpers/fetch";
 import { ShareLinkModal } from "../../components/Teacher/ShareLinkModal";
 import { Link } from "react-router-dom";
 
@@ -34,6 +34,13 @@ export const ShareCodePage = () => {
                     <h4>Topic: {qsssa.qsssa?.topic}</h4>
                     <h6 className="mb-1">{qsssa.qsssa?.question}</h6>
                     <p>{qsssa.qsssa?.sentenceStem}</p>
+                    {qsssa.qsssa?.img && (
+                      <img
+                        className="img-fluid"
+                        src={`${baseUrl}/upload/qsssas/${id}`}
+                        alt={`${qsssa}`}
+                      />
+                    )}
                   </div>
                   <div>
                     <div className="tag">{id.slice(0, 6)}</div>

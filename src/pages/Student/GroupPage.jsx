@@ -37,17 +37,17 @@ export const GroupPage = () => {
             <div className="col-lg-12">
               <div className="justify-content-center row">
                 <div className="col-lg-6">
-                  {qsssa.qsssa?.img && (
-                    <img
-                      className="img-fluid mb-5"
-                      src={`${baseUrl}/upload/qsssas/${id}`}
-                      alt={`${qsssa}`}
-                    />
-                  )}
                   <div className="questions-custom">
                     <p>While you are waiting think about this question: </p>
                     <h6>Question: {qsssa.qsssa?.question}</h6>
                     <audio src={audioURL} controls />
+                    {qsssa.qsssa?.img && (
+                      <img
+                        className="img-fluid"
+                        src={`${baseUrl}/upload/qsssas/${id}`}
+                        alt={`${qsssa}`}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
@@ -101,32 +101,36 @@ export const GroupPage = () => {
                         <tr>
                           <td>{name}</td>
                           <td>
-                            {isRecording ? (
-                              <button
-                                onClick={stopRecording}
-                                className="btn btn-sm btn-primary"
-                              >
-                                <span>
-                                  <i className="fas fa-microphone" />
-                                  Stop
-                                </span>
-                              </button>
-                            ) : (
-                              <button
-                                onClick={startRecording}
-                                className="btn btn-sm btn-primary"
-                              >
-                                <span>
-                                  <i className="fas fa-microphone" />
-                                  Record
-                                </span>
-                              </button>
-                            )}
-                            {audioURL && (
-                              <button className="btn btn-sm btn-primary mt-2">
-                                Submit
-                              </button>
-                            )}
+                            <span className="rec-main">
+                              {isRecording ? (
+                                <button
+                                  onClick={stopRecording}
+                                  className="btn btn-small rec-button"
+                                >
+                                  <span>
+                                    <i className="fas fa-microphone" />
+                                    Stop
+                                  </span>
+                                </button>
+                              ) : (
+                                <>
+                                  <button
+                                    onClick={startRecording}
+                                    className="btn btn-small rec-button"
+                                  >
+                                    <span>
+                                      <i className="fas fa-microphone" />
+                                      Record
+                                    </span>
+                                  </button>
+                                </>
+                              )}
+                              {audioURL && (
+                                <button className="btn btn-small btn-secondary">
+                                  Submit
+                                </button>
+                              )}
+                            </span>
                           </td>
                           <td>
                             <button
