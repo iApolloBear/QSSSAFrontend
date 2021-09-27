@@ -3,13 +3,13 @@ import { Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
-  const [number, setNumber] = useState(0);
+  const [groups, setGroups] = useState([]);
   const [option, setOption] = useState("random");
 
   const onChange = ({ target }) => setOption(target.id);
 
-  const more = () => setNumber(number + 1);
-  const less = () => setNumber(number - 1);
+  const more = () => setGroups([...groups, `Group ${groups.length}`]);
+  const less = () => setGroups(groups.slice(0, -1));
   const options = [
     "Longest hair",
     "Shortest hair",
@@ -18,6 +18,12 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
     "Shortest",
     "Darkest shoes",
   ];
+
+  const onItemChange = (value, index) => {
+    const newArr = [...groups];
+    newArr[index] = value;
+    setGroups(newArr);
+  };
 
   return (
     <Modal show={show} onHide={handleClose}>
@@ -29,7 +35,8 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
               type="number"
               placeholder="Enter number"
               className="custom-input__input form-control"
-              value={number}
+              value={groups.length}
+              readOnly
             />
             <button
               type="button"
@@ -46,14 +53,15 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
               &#9660;
             </button>
           </div>
-          {number > 0 &&
-            [...Array(number)].map((item, i) => (
+          {groups.length > 0 &&
+            groups.map((item, i) => (
               <input
                 key={i}
                 className="form-control"
                 type="text"
-                placeholder={`Group ${i + 1} name`}
-                value={`Group ${i + 1}`}
+                placeholder={item}
+                value={item}
+                onChange={(e) => onItemChange(e.target.value, i)}
               />
             ))}
           {onlyRecording && (
@@ -103,7 +111,9 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
                 </div>
               </div>
             ))}
-          <input className="form-control mx-4 my-3" placeholder="Other" />
+          {option === "identifiers" && (
+            <input className="form-control mx-4 my-3" placeholder="Other" />
+          )}
           <div className="form-check">
             <input
               className="form-check-input"

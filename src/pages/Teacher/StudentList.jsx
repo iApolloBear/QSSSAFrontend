@@ -46,7 +46,7 @@ export const StudentListPage = () => {
                     <li>Student Name</li>
                     {students?.map((user) => (
                       <li key={user._id}>
-                        {user.ready && <i class="fas fa-check"></i>} {user.name}
+                        {user.ready && <i className="fas fa-check"></i>} {user.name}
                       </li>
                     ))}
                   </ul>
