@@ -1,5 +1,6 @@
 import { useEffect, useCallback, useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { SocketContext } from "../../context/SocketContext";
 import { useParams } from "react-router-dom";
 import { fetchWithoutToken, baseUrl } from "../../helpers/fetch";
 import useRecorder from "../../hooks/useRecorder";
@@ -8,8 +9,9 @@ export const GroupPage = () => {
   const { id } = useParams();
   const [qsssa, setQSSSA] = useState({});
   const {
-    auth: { name },
+    auth: { name, uid },
   } = useContext(AuthContext);
+  const { socket } = useContext(SocketContext);
   const [users, setUsers] = useState(false);
   const [audioURL, isRecording, startRecording, stopRecording] = useRecorder();
   const [commentView, setCommentView] = useState("");
@@ -128,7 +130,9 @@ export const GroupPage = () => {
                           </td>
                           <td>
                             <button
-                              onClick={() => setUsers(true)}
+                              onClick={() => {
+                                socket.emit("ready", uid);
+                              }}
                               className="btn btn-small btn-primary"
                             >
                               Ready to answer
