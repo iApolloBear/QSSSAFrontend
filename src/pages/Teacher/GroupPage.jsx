@@ -27,7 +27,10 @@ export const GroupPage = () => {
             {qsssa.qsssa?.groups.map((group) => (
               <div key={group._id} className="col-md-6 col-lg-6">
                 <div className="form-main multi-group">
-                  <div className="form-wrap">
+                  <div
+                    style={{ background: group.color }}
+                    className="form-wrap"
+                  >
                     <h2 className="h5">{group.name}</h2>
                     <div className="inner-box">
                       <table>
