@@ -1,8 +1,10 @@
 import { useEffect, useCallback, useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { GroupsContext } from "../../context/groups/GroupsContext";
 import { SocketContext } from "../../context/SocketContext";
 import { useParams } from "react-router-dom";
 import { fetchWithoutToken, baseUrl } from "../../helpers/fetch";
+import Picker from "emoji-picker-react";
 import useRecorder from "../../hooks/useRecorder";
 
 export const GroupPage = () => {
@@ -12,9 +14,15 @@ export const GroupPage = () => {
     auth: { name, uid },
   } = useContext(AuthContext);
   const { socket } = useContext(SocketContext);
-  const [users, setUsers] = useState(false);
+  const [users] = useState(false);
   const [audioURL, isRecording, startRecording, stopRecording] = useRecorder();
   const [commentView, setCommentView] = useState("");
+  const { groupsState } = useContext(GroupsContext);
+  const [emoji, setEmoji] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const onChange = ({ target }) => setMessage(target.value);
+  const onEmojiClick = (e, { emoji }) => setMessage(`${message}${emoji}`);
 
   const getQSSSA = useCallback(async (id) => {
     const fetchQSSSA = await fetchWithoutToken(`qsssa/${id}`);
@@ -32,6 +40,11 @@ export const GroupPage = () => {
           <div className="d-flex justify-content-between top-title-main">
             <p>{qsssa.qsssa?.accessCode}</p>
             <p>{qsssa.qsssa?.topic}</p>
+          </div>
+          <div className="row">
+            {/*{groups.map((group) => (*/}
+            {/*<span>{group.name}</span>*/}
+            {/*)*/}
           </div>
           <div className="justify-content-center row">
             <div className="col-lg-12">
@@ -145,6 +158,36 @@ export const GroupPage = () => {
                         </tr>
                       </tbody>
                     </table>
+                  </div>
+
+                  <div className="input-group mt-5">
+                    <input
+                      type="text"
+                      placeholder="Enter your message"
+                      className="form-control mb-0"
+                      name="message"
+                      value={message}
+                      onChange={onChange}
+                    />
+                    <div className="input group-append">
+                      <button
+                        type="button"
+                        className="code-button btn-small btn btn-primary"
+                        onClick={() => setEmoji(!emoji)}
+                      >
+                        {!emoji ? "\uD83D\uDE00" : "\u2715"}
+                      </button>
+                      <Picker
+                        pickerStyle={{
+                          position: "absolute",
+                          right: "0",
+                          bottom: "100%",
+                          zIndex: "9",
+                          display: emoji ? "flex" : "none",
+                        }}
+                        onEmojiClick={onEmojiClick}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

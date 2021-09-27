@@ -1,12 +1,14 @@
 import { useEffect, useState, useCallback, useContext } from "react";
 import io from "socket.io-client";
 import { StudentsContext } from "../context/students/StudentsContext";
+import { GroupsContext } from "../context/groups/GroupsContext";
 import { types } from "../types/types";
 
 export const useSocket = (serverPath) => {
   const [socket, setSocket] = useState(null);
   const [online, setOnline] = useState(false);
   const { dispatch } = useContext(StudentsContext);
+  const { dispatch: groupsDispatch } = useContext(GroupsContext);
 
   const connectSocket = useCallback(
     (path = "") => {
@@ -47,6 +49,12 @@ export const useSocket = (serverPath) => {
       dispatch({ type: types.studentsLoaded, payload: users });
     });
   }, [socket, dispatch]);
+
+  useEffect(() => {
+    socket?.on("list-groups", (groups) => {
+      groupsDispatch({ type: types.groupsLoaded, payload: groups });
+    });
+  }, [socket, groupsDispatch]);
 
   return {
     socket,
