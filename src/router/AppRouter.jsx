@@ -10,6 +10,7 @@ import { StudentCode } from "../pages/Student/StudentCode";
 import { GroupPage } from "../pages/Student/GroupPage";
 import { StudentListPage } from "../pages/Teacher/StudentList";
 import { GroupPage as TeacherGroupPage } from "../pages/Teacher/GroupPage";
+import { LoginPage } from "../pages/LoginPage";
 
 export const AppRouter = () => {
   const { auth, verifyToken } = useContext(AuthContext);
@@ -34,6 +35,7 @@ export const AppRouter = () => {
         <Route exact path="/student/grouppage/:id" component={GroupPage} />
         <Route exact path="/studentlist/:id" component={StudentListPage} />
         <Route exact path="/teacher/group/:id" component={TeacherGroupPage} />
+        <Route exact path="/login" component={LoginPage} />
       </Switch>
     </Router>
   );

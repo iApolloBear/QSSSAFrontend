@@ -1,6 +1,5 @@
 import { useEffect, useCallback, useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { GroupsContext } from "../../context/groups/GroupsContext";
 import { SocketContext } from "../../context/SocketContext";
 import { useParams } from "react-router-dom";
 import { fetchWithoutToken, baseUrl } from "../../helpers/fetch";
@@ -17,7 +16,6 @@ export const GroupPage = () => {
   const [users] = useState(false);
   const [audioURL, isRecording, startRecording, stopRecording] = useRecorder();
   const [commentView, setCommentView] = useState("");
-  const { groupsState } = useContext(GroupsContext);
   const [emoji, setEmoji] = useState(false);
   const [message, setMessage] = useState("");
 
