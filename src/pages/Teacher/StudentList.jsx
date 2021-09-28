@@ -9,7 +9,7 @@ export const StudentListPage = () => {
   const { id } = useParams();
   const [qsssa, setQSSSA] = useState({});
   const [show, setShow] = useState(false);
-  const { connectSocket } = useSocket("http://localhost:4000");
+  const { connectSocket } = useSocket("https://qsssa-backend.herokuapp.com");
   const {
     studentsState: { students },
   } = useContext(StudentsContext);
@@ -46,7 +46,8 @@ export const StudentListPage = () => {
                     <li>Student Name</li>
                     {students?.map((user) => (
                       <li key={user._id}>
-                        {user.ready && <i className="fas fa-check"></i>} {user.name}
+                        {user.ready && <i className="fas fa-check"></i>}{" "}
+                        {user.name}
                       </li>
                     ))}
                   </ul>

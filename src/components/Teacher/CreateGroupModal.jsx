@@ -8,7 +8,7 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
   const history = useHistory();
   const [groups, setGroups] = useState([]);
   const [option, setOption] = useState("random");
-  const { connectSocket, socket } = useSocket("http://localhost:4000");
+  const { connectSocket, socket } = useSocket("https://qsssa-backend.herokuapp.com");
 
   const onChange = ({ target }) => setOption(target.id);
 

@@ -7,7 +7,9 @@ import { types } from "../types/types";
 export const SocketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
-  const { socket, online, connectSocket } = useSocket("http://localhost:4000");
+  const { socket, online, connectSocket } = useSocket(
+    "https://qsssa-backend.herokuapp.com"
+  );
   const { auth } = useContext(AuthContext);
   const { dispatch: groupsDispatch } = useContext(GroupsContext);
 
