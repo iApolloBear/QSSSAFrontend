@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { fetchWithoutToken } from "../../helpers/fetch";
 import { CodeJoinForm } from "./CodeJoinForm";
+import queryString from "query-string";
 
 const schema = yup.object().shape({
   code: yup.string().required().length(6),
@@ -21,6 +22,7 @@ export const CodeForm = () => {
   const [qsssa, setQSSSA] = useState({});
   const [join, setJoin] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { code } = queryString.parse(window.location.search);
 
   const onSubmit = async ({ code }) => {
     setLoading(true);
@@ -49,6 +51,7 @@ export const CodeForm = () => {
                 type="text"
                 placeholder="Code"
                 className="form-control mb-0"
+                defaultValue={code}
                 {...register("code")}
               />
               <div className="input-group-append">
