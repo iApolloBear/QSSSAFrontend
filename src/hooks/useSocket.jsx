@@ -52,6 +52,7 @@ export const useSocket = (serverPath) => {
 
   useEffect(() => {
     socket?.on("list-groups", (groups) => {
+      console.log(groups);
       groupsDispatch({ type: types.groupsLoaded, payload: groups });
     });
   }, [socket, groupsDispatch]);

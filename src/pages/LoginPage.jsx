@@ -14,13 +14,13 @@ export const LoginPage = () => {
               <div className="page-links">
                 <button
                   onClick={() => setOption("login")}
-                  className={option === "login" && "active"}
+                  className={option === "login" ? "active" : ""}
                 >
                   Login
                 </button>
                 <button
                   onClick={() => setOption("register")}
-                  className={option === "register" && "active"}
+                  className={option === "register" ? "active" : ""}
                 >
                   Register
                 </button>

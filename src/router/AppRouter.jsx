@@ -10,7 +10,7 @@ import { StudentCode } from "../pages/Student/StudentCode";
 import { GroupPage } from "../pages/Student/GroupPage";
 import { StudentListPage } from "../pages/Teacher/StudentList";
 import { GroupPage as TeacherGroupPage } from "../pages/Teacher/GroupPage";
-import { LoginPage } from "../pages/LoginPage";
+import { PublicRoutes } from "./PublicRoutes";
 
 export const AppRouter = () => {
   const { auth, verifyToken } = useContext(AuthContext);
@@ -25,18 +25,27 @@ export const AppRouter = () => {
 
   return (
     <Router>
-      <Navbar />
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/teacher" component={TeacherPage} />
-        <Route exact path="/shareCode/:id" component={ShareCodePage} />
-        <Route exact path="/student" component={StudentPage} />
-        <Route exact path="/student/code/:id" component={StudentCode} />
-        <Route exact path="/student/grouppage/:id" component={GroupPage} />
-        <Route exact path="/studentlist/:id" component={StudentListPage} />
-        <Route exact path="/teacher/group/:id" component={TeacherGroupPage} />
-        <Route exact path="/login" component={LoginPage} />
-      </Switch>
+      {auth.logged ? (
+        <>
+          <Navbar />
+          <Switch>
+            <Route exact path="/" component={HomePage} />
+            <Route exact path="/teacher" component={TeacherPage} />
+            <Route exact path="/shareCode/:id" component={ShareCodePage} />
+            <Route exact path="/student" component={StudentPage} />
+            <Route exact path="/student/code/:id" component={StudentCode} />
+            <Route exact path="/student/grouppage/:id" component={GroupPage} />
+            <Route exact path="/studentlist/:id" component={StudentListPage} />
+            <Route
+              exact
+              path="/teacher/group/:id"
+              component={TeacherGroupPage}
+            />
+          </Switch>
+        </>
+      ) : (
+        <PublicRoutes />
+      )}
     </Router>
   );
 };

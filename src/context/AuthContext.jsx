@@ -8,7 +8,8 @@ const initialState = {
   checking: true,
   logged: false,
   name: null,
-  qsssa: null,
+  email: null,
+  role: null,
 };
 
 export const AuthProvider = ({ children }) => {
@@ -34,6 +35,27 @@ export const AuthProvider = ({ children }) => {
       return resp.ok;
     }
     return resp.msg;
+  };
+
+  const login = async (email, password) => {
+    const resp = await fetchWithoutToken(
+      "users/login",
+      { email, password },
+      "POST"
+    );
+    if (resp.ok) {
+      const { token, user } = resp;
+      localStorage.setItem("token", token);
+      setAuth({
+        uid: user._id,
+        name: user.name,
+        checking: false,
+        logged: true,
+        email: user.email,
+        role: user.role,
+      });
+    }
+    return resp.ok;
   };
 
   const logout = () => {
@@ -66,7 +88,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ auth, register, verifyToken, logout }}>
+    <AuthContext.Provider
+      value={{ auth, login, register, verifyToken, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
