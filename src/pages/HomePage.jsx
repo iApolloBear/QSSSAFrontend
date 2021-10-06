@@ -1,26 +1,9 @@
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
 import { Images } from "../constants/Image";
 import { Inbox } from "../components/Home/Inbox";
 
 export const HomePage = () => {
-  const { logout } = useContext(AuthContext);
-
   return (
     <div className="home-main">
-      <div className="container">
-        <div className="row">
-          <div className="col-md-12">
-            <button
-              onClick={logout}
-              type="button"
-              className="btn btn-small mt-3 btn-secondary"
-            >
-              Clear previous data
-            </button>
-          </div>
-        </div>
-      </div>
       <div className="container">
         <div className="home-wrap">
           <div className="row justify-content-center">

@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 export const Navbar = () => {
   const {
     auth: { name },
+    logout,
   } = useContext(AuthContext);
 
   return (
@@ -28,6 +29,9 @@ export const Navbar = () => {
                    */}
                   {name && <span className="d-block">{name}</span>}
                 </div>
+                <button onClick={logout} className="btn btn-small ms-3">
+                  Logout
+                </button>
               </div>
             </div>
           </div>

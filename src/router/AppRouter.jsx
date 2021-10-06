@@ -1,5 +1,10 @@
 import { useContext, useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { Navbar } from "../components/Layout/Navbar/Navbar";
 import { HomePage } from "../pages/HomePage";
@@ -41,6 +46,7 @@ export const AppRouter = () => {
               path="/teacher/group/:id"
               component={TeacherGroupPage}
             />
+            <Redirect to="/" />
           </Switch>
         </>
       ) : (

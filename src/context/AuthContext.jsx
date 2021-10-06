@@ -69,16 +69,17 @@ export const AuthProvider = ({ children }) => {
       setAuth({ ...initialState, checking: false });
       return false;
     }
-    const resp = await fetchWithToken("students/renew");
+    const resp = await fetchWithToken("users/renew");
     if (resp.ok) {
-      localStorage.setItem("token", resp.token);
-      const { student } = resp;
+      const { token, user } = resp;
+      localStorage.setItem("token", token);
       setAuth({
-        uid: student._id,
-        name: student.name,
+        uid: user._id,
+        name: user.name,
         checking: false,
         logged: true,
-        qsssa: student.qsssa.accessCode,
+        emai: user.email,
+        role: user.role,
       });
 
       return resp.ok;
