@@ -1,11 +1,11 @@
 import { useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
 import { Link, NavLink, Switch, Route } from "react-router-dom";
-import { Students } from "./Students";
-import { Teachers } from "./Teachers";
-import { QSSSAS } from "./QSSSAS";
+import { Students } from "../pages/Admin/Students";
+import { Teachers } from "../pages/Admin/Teachers";
+import { QSSSAS } from "../pages/Admin/QSSSAS";
 
-export const Dashboard = () => {
+export const AdminRoutes = () => {
   const { logout } = useContext(AuthContext);
 
   return (

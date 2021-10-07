@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { Dashboard } from "../pages/Admin/Dashboard";
+import { AdminRoutes } from "./AdminRoutes";
 import { PublicRoutes } from "./PublicRoutes";
 import { TeacherRoutes } from "./TeacherRoutes";
 import { StudentRoutes } from "./StudentRoutes";
@@ -21,7 +21,7 @@ export const AppRouter = () => {
     <Router>
       {auth.logged ? (
         <>
-          {auth.role === "ADMIN_ROLE" && <Dashboard />}
+          {auth.role === "ADMIN_ROLE" && <AdminRoutes />}
           {auth.role === "TEACHER_ROLE" && <TeacherRoutes />}
           {auth.role === "STUDENT_ROLE" && <StudentRoutes />}
         </>

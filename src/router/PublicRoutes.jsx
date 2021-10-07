@@ -1,6 +1,5 @@
 import { Switch, Route, Redirect } from "react-router-dom";
 import { LoginPage } from "../pages/LoginPage";
-import { Dashboard } from "../pages/Admin/Dashboard";
 
 export const PublicRoutes = () => {
   return (
