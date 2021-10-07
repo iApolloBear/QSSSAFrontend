@@ -31,7 +31,7 @@ export const LoginForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <input
-        type="text"
+        type="email"
         className="form-control"
         placeholder="E-mail Address"
         {...register("email")}

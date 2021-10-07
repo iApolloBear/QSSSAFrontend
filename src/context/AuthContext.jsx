@@ -15,8 +15,9 @@ const initialState = {
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState(initialState);
 
-  const register = async (name, email = "", password = "") => {
-    const params = email && password ? { name, email, password } : { name };
+  const register = async (name, email = "", password = "", role = "") => {
+    const params =
+      email && password && role ? { name, email, password, role } : { name };
     const resp = await fetchWithoutToken("users", params, "POST");
 
     if (resp.ok) {
