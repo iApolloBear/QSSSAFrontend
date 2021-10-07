@@ -42,6 +42,24 @@ export const Dashboard = () => {
           </div>
         </div>
       </div>
+      <div className="main-panel">
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+          <div className="container-fluid">
+            <div className="navbar-collapse collapse show">
+              <div className="ms-auto navbar-nav">
+                <div className="nav-item">
+                  <button className="btn btn-primary btn-small">Logout</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+        <div className="content">
+          <div className="container-fluid">
+            <div className="row"></div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
