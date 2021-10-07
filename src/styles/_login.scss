@@ -35,7 +35,8 @@
             margin-bottom: 34px;
 
             button {
-              &:nth-child(1) {
+              &:nth-child(1),
+              &:nth-child(2) {
                 margin-right: 20px;
               }
 

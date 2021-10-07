@@ -6,7 +6,6 @@ export const PublicRoutes = () => {
   return (
     <Switch>
       <Route exact path="/login" component={LoginPage} />
-      <Route exact path="/dashboard" component={Dashboard} />
       <Redirect to="/login" />
     </Switch>
   );

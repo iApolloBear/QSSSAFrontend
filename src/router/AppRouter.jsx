@@ -15,6 +15,7 @@ import { StudentCode } from "../pages/Student/StudentCode";
 import { GroupPage } from "../pages/Student/GroupPage";
 import { StudentListPage } from "../pages/Teacher/StudentList";
 import { GroupPage as TeacherGroupPage } from "../pages/Teacher/GroupPage";
+import { Dashboard } from "../pages/Admin/Dashboard";
 import { PublicRoutes } from "./PublicRoutes";
 
 export const AppRouter = () => {
@@ -32,7 +33,8 @@ export const AppRouter = () => {
     <Router>
       {auth.logged ? (
         <>
-          <Navbar />
+          <Dashboard />
+          {/*<Navbar />
           <Switch>
             <Route exact path="/" component={HomePage} />
             <Route exact path="/teacher" component={TeacherPage} />
@@ -47,7 +49,7 @@ export const AppRouter = () => {
               component={TeacherGroupPage}
             />
             <Redirect to="/" />
-          </Switch>
+          </Switch>*/}
         </>
       ) : (
         <PublicRoutes />

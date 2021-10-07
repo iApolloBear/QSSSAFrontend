@@ -1,6 +1,13 @@
-import { Link, NavLink } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { Link, NavLink, Switch, Route } from "react-router-dom";
+import { Students } from "./Students";
+import { Teachers } from "./Teachers";
+import { QSSSAS } from "./QSSSAS";
 
 export const Dashboard = () => {
+  const { logout } = useContext(AuthContext);
+
   return (
     <div className="dashboard">
       <div className="sidebar">
@@ -15,28 +22,28 @@ export const Dashboard = () => {
             <li>
               <NavLink
                 className="nav-link"
-                to="/dashboard"
+                to="/students"
                 activeClassName="active"
               >
-                Dashboard
+                Students
               </NavLink>
             </li>
             <li>
               <NavLink
                 className="nav-link"
-                to="/login"
+                to="/teachers"
                 activeClassName="active"
               >
-                Login
+                Teachers
               </NavLink>
             </li>
             <li>
               <NavLink
                 className="nav-link"
-                to="/register"
+                to="/qsssas"
                 activeClassName="active"
               >
-                Register
+                QSSSAS
               </NavLink>
             </li>
           </div>
@@ -48,7 +55,12 @@ export const Dashboard = () => {
             <div className="navbar-collapse collapse show">
               <div className="ms-auto navbar-nav">
                 <div className="nav-item">
-                  <button className="btn btn-primary btn-small">Logout</button>
+                  <button
+                    onClick={logout}
+                    className="btn btn-primary btn-small"
+                  >
+                    Logout
+                  </button>
                 </div>
               </div>
             </div>
@@ -56,7 +68,13 @@ export const Dashboard = () => {
         </nav>
         <div className="content">
           <div className="container-fluid">
-            <div className="row"></div>
+            <div className="row">
+              <Switch>
+                <Route exact path="/students" component={Students} />
+                <Route exact path="/teachers" component={Teachers} />
+                <Route exact path="/qsssas" component={QSSSAS} />
+              </Switch>
+            </div>
           </div>
         </div>
       </div>
