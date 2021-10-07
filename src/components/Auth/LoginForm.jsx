@@ -24,10 +24,8 @@ export const LoginForm = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
     const { email, password } = data;
-    const ok = login(email, password);
-    console.log(ok);
+    login(email, password);
   };
 
   return (

@@ -15,22 +15,20 @@ const initialState = {
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState(initialState);
 
-  const register = async (name, accessCode) => {
-    const resp = await fetchWithoutToken(
-      "students",
-      { name, qsssaId: accessCode },
-      "POST"
-    );
+  const register = async (name, email = "", password = "") => {
+    const params = email && password ? { name, email, password } : { name };
+    const resp = await fetchWithoutToken("users", params, "POST");
 
     if (resp.ok) {
-      localStorage.setItem("token", resp.token);
-      const { student } = resp;
+      const { user, token } = resp;
+      localStorage.setItem("token", token);
       setAuth({
-        uid: student._id,
-        name: student.name,
+        uid: user._id,
+        name: user.name,
         checking: false,
         logged: true,
-        qsssa: student.qsssa.accessCode,
+        email: user.email,
+        role: user.role,
       });
       return resp.ok;
     }
