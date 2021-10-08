@@ -9,13 +9,13 @@ export const ShareLinkModal = ({ show, handleClose, id }) => {
       </Modal.Header>
       <Modal.Body>
         <Link
-          to={`/student?code=${id}`}
+          to={`/?code=${id}`}
           target="_blank"
-        >{`${window.location.protocol}/${window.location.host}/student?code=${id}`}</Link>
+        >{`${window.location.protocol}/${window.location.host}/?code=${id}`}</Link>
       </Modal.Body>
       <Modal.Footer>
         <Link
-          to={`/student?code=${id}`}
+          to={`/?code=${id}`}
           target="_blank"
           className="btn btn-small btn-secondary"
         >

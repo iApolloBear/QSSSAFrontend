@@ -1,9 +1,9 @@
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { fetchWithoutToken } from "../../helpers/fetch";
-import { CodeJoinForm } from "./CodeJoinForm";
+import { fetchWithToken } from "../../helpers/fetch";
 import queryString from "query-string";
 
 const schema = yup.object().shape({
@@ -19,23 +19,20 @@ export const CodeForm = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const [qsssa, setQSSSA] = useState({});
-  const [join, setJoin] = useState(false);
   const [loading, setLoading] = useState(false);
   const { code } = queryString.parse(window.location.search);
+  const history = useHistory();
 
   const onSubmit = async ({ code }) => {
     setLoading(true);
-    const resp = await fetchWithoutToken(`qsssa/${code}`);
+    const resp = await fetchWithToken(`qsssa/join/${code}`);
     if (!resp.ok) {
       setError("code", {
         type: "Not found",
         message: "QSSSA Not Found",
       });
-      setJoin(false);
     } else {
-      setQSSSA(resp.qsssa);
-      setJoin(true);
+      history.push(`group/${code}`);
     }
     setLoading(false);
   };
@@ -75,7 +72,6 @@ export const CodeForm = () => {
           </p>
         </form>
       </div>
-      {join && <CodeJoinForm qsssa={qsssa} />}
     </>
   );
 };

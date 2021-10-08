@@ -21,8 +21,9 @@ export const AdminRoutes = () => {
           <div className="nav">
             <li>
               <NavLink
+                exact
                 className="nav-link"
-                to="/students"
+                to="/"
                 activeClassName="active"
               >
                 Students
@@ -30,6 +31,7 @@ export const AdminRoutes = () => {
             </li>
             <li>
               <NavLink
+                exact
                 className="nav-link"
                 to="/teachers"
                 activeClassName="active"
@@ -39,6 +41,7 @@ export const AdminRoutes = () => {
             </li>
             <li>
               <NavLink
+                exact
                 className="nav-link"
                 to="/qsssas"
                 activeClassName="active"
