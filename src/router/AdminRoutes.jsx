@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { Link, NavLink, Switch, Route } from "react-router-dom";
+import { Link, NavLink, Switch, Route, Redirect } from "react-router-dom";
 import { Students } from "../pages/Admin/Students";
 import { Teachers } from "../pages/Admin/Teachers";
 import { QSSSAS } from "../pages/Admin/QSSSAS";
@@ -70,9 +70,10 @@ export const AdminRoutes = () => {
           <div className="container-fluid">
             <div className="row">
               <Switch>
-                <Route exact path="/students" component={Students} />
+                <Route exact path="/" component={Students} />
                 <Route exact path="/teachers" component={Teachers} />
                 <Route exact path="/qsssas" component={QSSSAS} />
+                <Redirect to="/" />
               </Switch>
             </div>
           </div>
