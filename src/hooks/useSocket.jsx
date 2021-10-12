@@ -28,9 +28,12 @@ export const useSocket = (serverPath) => {
     socket?.disconnect();
   }, [socket]);
 
-  const joinRoom = (room) => {
-    socket?.emit("join", room);
-  };
+  const joinRoom = useCallback(
+    (room) => {
+      socket?.emit("join", room);
+    },
+    [socket]
+  );
 
   useEffect(() => {
     setOnline(socket?.connected);

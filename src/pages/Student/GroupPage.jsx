@@ -1,5 +1,6 @@
 import { useEffect, useCallback, useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { RoomContext } from "../../context/RoomContext";
 import { SocketContext } from "../../context/SocketContext";
 import { useParams } from "react-router-dom";
 import { fetchWithoutToken, baseUrl } from "../../helpers/fetch";
@@ -13,6 +14,7 @@ export const GroupPage = () => {
     auth: { name, uid },
   } = useContext(AuthContext);
   const { socket } = useContext(SocketContext);
+  const { room, join } = useContext(RoomContext);
   const [users] = useState(false);
   const [audioURL, isRecording, startRecording, stopRecording] = useRecorder();
   const [commentView, setCommentView] = useState("");
@@ -22,10 +24,14 @@ export const GroupPage = () => {
   const onChange = ({ target }) => setMessage(target.value);
   const onEmojiClick = (e, { emoji }) => setMessage(`${message}${emoji}`);
 
-  const getQSSSA = useCallback(async (id) => {
-    const fetchQSSSA = await fetchWithoutToken(`qsssa/${id}`);
-    setQSSSA(fetchQSSSA);
-  }, []);
+  const getQSSSA = useCallback(
+    async (id) => {
+      const fetchQSSSA = await fetchWithoutToken(`qsssa/${id}`);
+      join(id);
+      setQSSSA(fetchQSSSA);
+    },
+    [join]
+  );
 
   useEffect(() => {
     getQSSSA(id);
@@ -146,7 +152,7 @@ export const GroupPage = () => {
                           <td>
                             <button
                               onClick={() => {
-                                socket.emit("ready", uid);
+                                socket.emit("ready", { uid, room });
                               }}
                               className="btn btn-small btn-primary"
                             >
