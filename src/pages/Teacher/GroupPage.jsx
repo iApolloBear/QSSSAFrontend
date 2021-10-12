@@ -1,15 +1,21 @@
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
+import { RoomContext } from "../../context/RoomContext";
 import { fetchWithoutToken } from "../../helpers/fetch";
 
 export const GroupPage = () => {
   const { id } = useParams();
   const [qsssa, setQSSSA] = useState({});
+  const { join } = useContext(RoomContext);
 
-  const getQSSSA = useCallback(async (id) => {
-    const fetchQSSSA = await fetchWithoutToken(`qsssa/${id}`);
-    setQSSSA(fetchQSSSA);
-  }, []);
+  const getQSSSA = useCallback(
+    async (id) => {
+      const fetchQSSSA = await fetchWithoutToken(`qsssa/${id}`);
+      join(id);
+      setQSSSA(fetchQSSSA);
+    },
+    [join]
+  );
 
   useEffect(() => {
     getQSSSA(id);

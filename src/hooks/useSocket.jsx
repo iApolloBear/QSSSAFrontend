@@ -10,27 +10,27 @@ export const useSocket = (serverPath) => {
   const { dispatch } = useContext(StudentsContext);
   const { dispatch: groupsDispatch } = useContext(GroupsContext);
 
-  const connectSocket = useCallback(
-    (path = "") => {
-      const token = localStorage.getItem("token");
+  const connectSocket = useCallback(() => {
+    const token = localStorage.getItem("token");
 
-      const socketTemp = io.connect(serverPath, {
-        transports: ["websocket"],
-        autoConnect: true,
-        forceNew: true,
-        query: {
-          "x-token": token,
-          path,
-        },
-      });
-      setSocket(socketTemp);
-    },
-    [serverPath]
-  );
+    const socketTemp = io.connect(serverPath, {
+      transports: ["websocket"],
+      autoConnect: true,
+      forceNew: true,
+      query: {
+        "x-token": token,
+      },
+    });
+    setSocket(socketTemp);
+  }, [serverPath]);
 
   const disconnectSocket = useCallback(() => {
     socket?.disconnect();
   }, [socket]);
+
+  const joinRoom = (room) => {
+    socket?.emit("join", room);
+  };
 
   useEffect(() => {
     setOnline(socket?.connected);
@@ -52,7 +52,6 @@ export const useSocket = (serverPath) => {
 
   useEffect(() => {
     socket?.on("list-groups", (groups) => {
-      console.log(groups);
       groupsDispatch({ type: types.groupsLoaded, payload: groups });
     });
   }, [socket, groupsDispatch]);
@@ -62,5 +61,6 @@ export const useSocket = (serverPath) => {
     online,
     connectSocket,
     disconnectSocket,
+    joinRoom,
   };
 };

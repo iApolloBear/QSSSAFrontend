@@ -1,14 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { fetchWithoutToken } from "../../helpers/fetch";
-import { useSocket } from "../../hooks/useSocket";
 
 export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
   const history = useHistory();
   const [groups, setGroups] = useState([]);
   const [option, setOption] = useState("random");
-  const { connectSocket, socket } = useSocket("http://localhost:4000");
 
   const onChange = ({ target }) => setOption(target.id);
 
@@ -40,14 +38,9 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
     );
 
     if (resp.ok) {
-      socket.emit("get-groups", resp.qsssa._id);
       history.push(`/teacher/group/${id}`);
     }
   };
-
-  useEffect(() => {
-    connectSocket(id);
-  }, [connectSocket, id]);
 
   return (
     <Modal show={show} onHide={handleClose}>

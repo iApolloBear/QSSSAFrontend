@@ -5,13 +5,19 @@ import { AdminRoutes } from "./AdminRoutes";
 import { PublicRoutes } from "./PublicRoutes";
 import { TeacherRoutes } from "./TeacherRoutes";
 import { StudentRoutes } from "./StudentRoutes";
+import { RoomContext } from "../context/RoomContext";
 
 export const AppRouter = () => {
   const { auth, verifyToken } = useContext(AuthContext);
+  const { verifyRoom } = useContext(RoomContext);
 
   useEffect(() => {
     verifyToken();
   }, [verifyToken]);
+
+  useEffect(() => {
+    verifyRoom();
+  }, [verifyRoom]);
 
   if (auth.checking) {
     return <h1>Loading...</h1>;

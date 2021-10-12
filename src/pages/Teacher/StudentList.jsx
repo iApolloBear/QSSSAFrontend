@@ -1,34 +1,34 @@
 import { useEffect, useCallback, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
-import { useSocket } from "../../hooks/useSocket";
 import { fetchWithoutToken } from "../../helpers/fetch";
 import { CreateGroupModal } from "../../components/Teacher/CreateGroupModal";
 import { StudentsContext } from "../../context/students/StudentsContext";
+import { RoomContext } from "../../context/RoomContext";
 
 export const StudentListPage = () => {
   const { id } = useParams();
   const [qsssa, setQSSSA] = useState({});
   const [show, setShow] = useState(false);
-  const { connectSocket } = useSocket("https://qsssa-backend.herokuapp.com");
   const {
     studentsState: { students },
   } = useContext(StudentsContext);
+  const { join } = useContext(RoomContext);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const getQSSSA = useCallback(async (id) => {
-    const fetchQSSSA = await fetchWithoutToken(`qsssa/${id}`);
-    setQSSSA(fetchQSSSA);
-  }, []);
+  const getQSSSA = useCallback(
+    async (id) => {
+      const fetchQSSSA = await fetchWithoutToken(`qsssa/${id}`);
+      join(id);
+      setQSSSA(fetchQSSSA);
+    },
+    [join]
+  );
 
   useEffect(() => {
     getQSSSA(id);
   }, [getQSSSA, id]);
-
-  useEffect(() => {
-    connectSocket(id);
-  }, [connectSocket, id]);
 
   return (
     <main>
