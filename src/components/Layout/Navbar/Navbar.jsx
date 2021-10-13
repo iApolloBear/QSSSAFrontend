@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 export const Navbar = () => {
   const {
-    auth: { name },
+    auth: { name, role },
     logout,
   } = useContext(AuthContext);
 
@@ -20,13 +20,18 @@ export const Navbar = () => {
               </Link>
 
               <div className="user-info">
+                {role === "TEACHER_ROLE" && (
+                  <Link to="/qsssas" className="me-4">
+                    QSSSA'S
+                  </Link>
+                )}
                 <figure>
                   <img src={Images.person.default} alt="nav-person-icon" />
                 </figure>
                 <div>
-                  {/*
-                   *<span className="designation">Prof.</span>
-                   */}
+                  {role === "TEACHER_ROLE" && (
+                    <span className="designation">Prof.</span>
+                  )}
                   {name && <span className="d-block">{name}</span>}
                 </div>
                 <button onClick={logout} className="btn btn-small ms-3">
