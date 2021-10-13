@@ -41,10 +41,13 @@ export const GroupPage = () => {
     [join]
   );
 
-  const getMessages = useCallback(async (id) => {
-    const { messages } = await fetchWithToken(`messages/${id}`);
-    messageDispatch({ type: types.messagesLoaded, payload: messages });
-  }, []);
+  const getMessages = useCallback(
+    async (id) => {
+      const { messages } = await fetchWithToken(`messages/${id}`);
+      messageDispatch({ type: types.messagesLoaded, payload: messages });
+    },
+    [messageDispatch]
+  );
 
   const sendMessage = async () => {
     if (message.length === 0) return;

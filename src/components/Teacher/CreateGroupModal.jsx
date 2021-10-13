@@ -38,7 +38,7 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
     );
 
     if (resp.ok) {
-      history.push(`/teacher/group/${id}`);
+      history.push(`/group/${id}`);
     }
   };
 
