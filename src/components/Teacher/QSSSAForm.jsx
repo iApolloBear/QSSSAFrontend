@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { fetchWithoutToken } from "../../helpers/fetch";
+import { fetchWithToken } from "../../helpers/fetch";
 import { useHistory } from "react-router-dom";
 
 const schema = yup.object().shape({
@@ -32,7 +32,7 @@ export const QSSSAForm = () => {
     }
     const {
       qsssa: { accessCode },
-    } = await fetchWithoutToken("qsssa", formData, "POST", true);
+    } = await fetchWithToken("qsssa", formData, "POST", true);
     history.push(`/shareCode/${accessCode}`);
   };
 

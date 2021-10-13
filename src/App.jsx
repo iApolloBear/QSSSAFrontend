@@ -5,6 +5,7 @@ import "./styles/style.scss";
 import { StudentsProvider } from "./context/students/StudentsContext";
 import { GroupsProvider } from "./context/groups/GroupsContext";
 import { RoomProvider } from "./context/RoomContext";
+import { MessagesProvider } from "./context/messages/MessagesContext";
 
 function App() {
   return (
@@ -12,9 +13,11 @@ function App() {
       <StudentsProvider>
         <AuthProvider>
           <RoomProvider>
-            <SocketProvider>
-              <AppRouter />
-            </SocketProvider>
+            <MessagesProvider>
+              <SocketProvider>
+                <AppRouter />
+              </SocketProvider>
+            </MessagesProvider>
           </RoomProvider>
         </AuthProvider>
       </StudentsProvider>

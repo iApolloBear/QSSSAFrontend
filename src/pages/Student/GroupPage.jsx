@@ -1,11 +1,17 @@
 import { useEffect, useCallback, useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { RoomContext } from "../../context/RoomContext";
+import { MessagesContext } from "../../context/messages/MessagesContext";
 import { SocketContext } from "../../context/SocketContext";
 import { useParams } from "react-router-dom";
-import { fetchWithoutToken, baseUrl } from "../../helpers/fetch";
+import {
+  fetchWithoutToken,
+  baseUrl,
+  fetchWithToken,
+} from "../../helpers/fetch";
 import Picker from "emoji-picker-react";
 import useRecorder from "../../hooks/useRecorder";
+import { types } from "../../types/types";
 
 export const GroupPage = () => {
   const { id } = useParams();
@@ -13,6 +19,8 @@ export const GroupPage = () => {
   const {
     auth: { name, uid },
   } = useContext(AuthContext);
+  const { messagesState, dispatch: messageDispatch } =
+    useContext(MessagesContext);
   const { socket } = useContext(SocketContext);
   const { room, join } = useContext(RoomContext);
   const [users] = useState(false);
@@ -33,9 +41,24 @@ export const GroupPage = () => {
     [join]
   );
 
+  const getMessages = useCallback(async (id) => {
+    const { messages } = await fetchWithToken(`messages/${id}`);
+    messageDispatch({ type: types.messagesLoaded, payload: messages });
+  }, []);
+
+  const sendMessage = async () => {
+    if (message.length === 0) return;
+    socket?.emit("message", { id: room, text: message, user: uid });
+    setMessage("");
+  };
+
   useEffect(() => {
     getQSSSA(id);
   }, [getQSSSA, id]);
+
+  useEffect(() => {
+    getMessages(id);
+  }, [getMessages, id]);
 
   return (
     <main>
@@ -54,6 +77,31 @@ export const GroupPage = () => {
             <div className="col-lg-12">
               <div className="justify-content-center row">
                 <div className="col-lg-6">
+                  <div className="py-4 ">
+                    {messagesState?.messages.map((message) =>
+                      message.user._id === uid ? (
+                        <div className="outgoing_msg">
+                          <div className="sent_msg">
+                            <p>{message.text}</p>
+                            <span className="time_date">
+                              {message.user.name}
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="incoming_msg">
+                          <div className="received_msg">
+                            <div className="received_withd_msg">
+                              <p>{message.text}</p>
+                              <span className="time_date">
+                                {message.user.name}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    )}
+                  </div>
                   <div className="questions-custom">
                     <p>While you are waiting think about this question: </p>
                     <h6>Question: {qsssa.qsssa?.question}</h6>
@@ -178,6 +226,7 @@ export const GroupPage = () => {
                         type="button"
                         className="code-button btn-small btn btn-primary"
                         onClick={() => setEmoji(!emoji)}
+                        style={{ right: "15px" }}
                       >
                         {!emoji ? "\uD83D\uDE00" : "\u2715"}
                       </button>
@@ -191,6 +240,13 @@ export const GroupPage = () => {
                         }}
                         onEmojiClick={onEmojiClick}
                       />
+                      <button
+                        type="button"
+                        className="code-button btn-small btn btn-primary"
+                        onClick={sendMessage}
+                      >
+                        <i className="fa fa-paper-plane" aria-hidden="true"></i>
+                      </button>
                     </div>
                   </div>
                 </div>

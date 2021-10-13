@@ -61,7 +61,6 @@ export const RegisterForm = () => {
       <select className="form-select form-select-lg" {...register("role")}>
         <option value="STUDENT_ROLE">Student</option>
         <option value="TEACHER_ROLE">Teacher</option>
-        <option value="ADMIN_ROLE">Admin</option>
       </select>
 
       <div className="form-button">
