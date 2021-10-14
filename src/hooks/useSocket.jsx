@@ -1,16 +1,17 @@
 import { useEffect, useState, useCallback, useContext } from "react";
 import io from "socket.io-client";
 import { StudentsContext } from "../context/students/StudentsContext";
-import { GroupsContext } from "../context/groups/GroupsContext";
 import { MessagesContext } from "../context/messages/MessagesContext";
+import { GroupsContext } from "../context/groups/GroupsContext";
 import { types } from "../types/types";
+import { fetchWithToken } from "../helpers/fetch";
 
 export const useSocket = (serverPath) => {
   const [socket, setSocket] = useState(null);
   const [online, setOnline] = useState(false);
   const { dispatch } = useContext(StudentsContext);
-  const { dispatch: groupsDispatch } = useContext(GroupsContext);
   const { dispatch: messagesDispatch } = useContext(MessagesContext);
+  const { dispatch: groupDispatch } = useContext(GroupsContext);
 
   const connectSocket = useCallback(() => {
     const token = localStorage.getItem("token");
@@ -37,6 +38,18 @@ export const useSocket = (serverPath) => {
     [socket]
   );
 
+  const getMyGroup = useCallback(
+    async (room) => {
+      socket?.on("get-my-group", async () => {
+        const resp = await fetchWithToken(`groups/${room}/my-group`);
+        if (resp.ok) {
+          groupDispatch({ type: types.groupsLoaded, payload: resp.group });
+        }
+      });
+    },
+    [socket, groupDispatch]
+  );
+
   useEffect(() => {
     setOnline(socket?.connected);
   }, [socket]);
@@ -56,12 +69,6 @@ export const useSocket = (serverPath) => {
   }, [socket, dispatch]);
 
   useEffect(() => {
-    socket?.on("list-groups", (groups) => {
-      groupsDispatch({ type: types.groupsLoaded, payload: groups });
-    });
-  }, [socket, groupsDispatch]);
-
-  useEffect(() => {
     socket?.on("group-message", (messages) => {
       messagesDispatch({ type: types.messagesLoaded, payload: messages });
     });
@@ -73,5 +80,6 @@ export const useSocket = (serverPath) => {
     connectSocket,
     disconnectSocket,
     joinRoom,
+    getMyGroup,
   };
 };

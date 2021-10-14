@@ -4,7 +4,7 @@ import { groupsReducer } from "./groupsReducer";
 export const GroupsContext = createContext();
 
 const initialState = {
-  groups: [],
+  group: {},
 };
 
 export const GroupsProvider = ({ children }) => {

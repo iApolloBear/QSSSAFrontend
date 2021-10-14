@@ -2,12 +2,14 @@ import { useContext } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 import { Images } from "../../../constants/Image";
 import { Link } from "react-router-dom";
+import { RoomContext } from "../../../context/RoomContext";
 
 export const Navbar = () => {
   const {
     auth: { name, role },
     logout,
   } = useContext(AuthContext);
+  const { leave } = useContext(RoomContext);
 
   return (
     <header>
@@ -34,7 +36,13 @@ export const Navbar = () => {
                   )}
                   {name && <span className="d-block">{name}</span>}
                 </div>
-                <button onClick={logout} className="btn btn-small ms-3">
+                <button
+                  onClick={() => {
+                    logout();
+                    leave();
+                  }}
+                  className="btn btn-small ms-3"
+                >
                   Logout
                 </button>
               </div>

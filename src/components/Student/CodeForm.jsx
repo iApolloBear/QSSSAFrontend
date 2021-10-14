@@ -26,7 +26,6 @@ export const CodeForm = () => {
   const onSubmit = async ({ code }) => {
     setLoading(true);
     const resp = await fetchWithToken(`qsssa/join/${code}`);
-    console.log(resp);
     if (!resp.ok) {
       setError("code", {
         type: "Not found",

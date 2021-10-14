@@ -3,6 +3,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { RoomContext } from "../../context/RoomContext";
 import { MessagesContext } from "../../context/messages/MessagesContext";
 import { SocketContext } from "../../context/SocketContext";
+import { GroupsContext } from "../../context/groups/GroupsContext";
 import { useParams } from "react-router-dom";
 import {
   fetchWithoutToken,
@@ -21,6 +22,10 @@ export const GroupPage = () => {
   } = useContext(AuthContext);
   const { messagesState, dispatch: messageDispatch } =
     useContext(MessagesContext);
+  const {
+    groupsState: { group },
+    dispatch: groupsDispatch,
+  } = useContext(GroupsContext);
   const { socket } = useContext(SocketContext);
   const { room, join } = useContext(RoomContext);
   const [users] = useState(false);
@@ -49,6 +54,11 @@ export const GroupPage = () => {
     [messageDispatch]
   );
 
+  const getMyGroup = useCallback(async () => {
+    const { group } = await fetchWithToken(`groups/${room}/my-group`);
+    groupsDispatch({ type: types.groupsLoaded, payload: group });
+  }, [groupsDispatch, room]);
+
   const sendMessage = async () => {
     if (message.length === 0) return;
     socket?.emit("message", { id: room, text: message, user: uid });
@@ -60,6 +70,10 @@ export const GroupPage = () => {
   }, [getQSSSA, id]);
 
   useEffect(() => {
+    getMyGroup();
+  }, [getMyGroup]);
+
+  useEffect(() => {
     getMessages(id);
   }, [getMessages, id]);
 
@@ -67,6 +81,7 @@ export const GroupPage = () => {
     <main>
       <div className="grp-main">
         <div className="container">
+          <h2 className="text-center top-title-main">{group.name}</h2>
           <div className="d-flex justify-content-between top-title-main">
             <p>{qsssa.qsssa?.accessCode}</p>
             <p>{qsssa.qsssa?.topic}</p>

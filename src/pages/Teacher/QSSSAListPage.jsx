@@ -38,7 +38,7 @@ export const QSSSAListPage = () => {
                   <tbody>
                     {qsssas.map((qsssa) => (
                       <tr
-                        onClick={() => go(qsssa.accessCode)}
+                        onDoubleClick={() => go(qsssa.accessCode)}
                         style={{ cursor: "pointer" }}
                         key={qsssa._id}
                       >

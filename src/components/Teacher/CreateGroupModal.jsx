@@ -1,12 +1,18 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Modal } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
+import { SocketContext } from "../../context/SocketContext";
 import { fetchWithoutToken } from "../../helpers/fetch";
+import { RoomContext } from "../../context/RoomContext";
 
 export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
   const history = useHistory();
   const [groups, setGroups] = useState([]);
   const [option, setOption] = useState("random");
+  const [identifier, setIdentifier] = useState("");
+  const [customIdentifier, setCustomIdentifier] = useState("");
+  const { socket } = useContext(SocketContext);
+  const { room } = useContext(RoomContext);
 
   const onChange = ({ target }) => setOption(target.id);
 
@@ -21,6 +27,16 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
     "Darkest shoes",
   ];
 
+  const onChangeIdentifier = ({ target }) => {
+    setCustomIdentifier("");
+    setIdentifier(target.value);
+  };
+
+  const onChangeCustomIdentifier = ({ target }) => {
+    setIdentifier("");
+    setCustomIdentifier(target.value);
+  };
+
   const onItemChange = (value, index) => {
     const newArr = [...groups];
     newArr[index] = value;
@@ -33,9 +49,12 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
       {
         qsssaId: id,
         groups,
+        identifier: identifier.length > 0 ? identifier : customIdentifier,
       },
       "POST"
     );
+
+    socket?.emit("get-groups", room);
 
     if (resp.ok) {
       history.push(`/group/${id}`);
@@ -116,7 +135,8 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
                     className="form-check-input"
                     type="radio"
                     name="option"
-                    id="random"
+                    value={item}
+                    onChange={onChangeIdentifier}
                   />
                   <label
                     style={{ position: "relative", top: "4px" }}
@@ -129,7 +149,12 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
               </div>
             ))}
           {option === "identifiers" && (
-            <input className="form-control mx-4 my-3" placeholder="Other" />
+            <input
+              className="form-control mx-4 my-3"
+              onChange={onChangeCustomIdentifier}
+              value={customIdentifier}
+              placeholder="Other"
+            />
           )}
           <div className="form-check">
             <input
