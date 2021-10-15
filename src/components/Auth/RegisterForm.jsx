@@ -1,11 +1,11 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { AuthContext } from "../../context/AuthContext";
+import Picker from "emoji-picker-react";
 
 const schema = yup.object().shape({
-  name: yup.string().required("The name is required"),
   email: yup
     .string()
     .email("Email should be valid")
@@ -15,6 +15,11 @@ const schema = yup.object().shape({
 
 export const RegisterForm = () => {
   const { register: userRegister } = useContext(AuthContext);
+  const [emoji, setEmoji] = useState(false);
+  const [name, setName] = useState("");
+
+  const onChange = ({ target }) => setName(target.value);
+  const onEmojiClick = (e, { emoji }) => setName(`${name}${emoji}`);
 
   const {
     register,
@@ -25,21 +30,39 @@ export const RegisterForm = () => {
   });
 
   const onSubmit = async (data) => {
-    const { name, email, password, role } = data;
+    const { email, password, role } = data;
     userRegister(name, email, password, role);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <input
-        type="text"
-        className="form-control"
-        placeholder="Full Name"
-        {...register("name")}
-      />
-      <p style={{ color: "red" }} className="mb-2 mt-0">
-        {errors.name?.message}
-      </p>
+      <div className="input-group mb-4">
+        <input
+          type="text"
+          placeholder="Enter your name"
+          className="form-control mb-0"
+          name="name"
+          value={name}
+          onChange={onChange}
+        />
+        <button
+          type="button"
+          className="code-button btn-small btn btn-primary"
+          onClick={() => setEmoji(!emoji)}
+        >
+          {!emoji ? "\uD83D\uDE00" : "\u2715"}
+        </button>
+        <Picker
+          pickerStyle={{
+            position: "absolute",
+            right: "0",
+            bottom: "100%",
+            zIndex: "9",
+            display: emoji ? "flex" : "none",
+          }}
+          onEmojiClick={onEmojiClick}
+        />
+      </div>
       <input
         type="email"
         className="form-control"
