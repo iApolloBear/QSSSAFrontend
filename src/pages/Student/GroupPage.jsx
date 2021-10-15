@@ -46,13 +46,12 @@ export const GroupPage = () => {
     [join]
   );
 
-  const getMessages = useCallback(
-    async (id) => {
-      const { messages } = await fetchWithToken(`messages/${id}`);
+  const getMessages = useCallback(async () => {
+    if (group?._id) {
+      const { messages } = await fetchWithToken(`messages/${group?._id}`);
       messageDispatch({ type: types.messagesLoaded, payload: messages });
-    },
-    [messageDispatch]
-  );
+    }
+  }, [messageDispatch, group]);
 
   const getMyGroup = useCallback(async () => {
     const { group } = await fetchWithToken(`groups/${room}/my-group`);
@@ -74,8 +73,8 @@ export const GroupPage = () => {
   }, [getMyGroup]);
 
   useEffect(() => {
-    getMessages(group?._id);
-  }, [getMessages, group]);
+    getMessages();
+  }, [getMessages]);
 
   return (
     <main>

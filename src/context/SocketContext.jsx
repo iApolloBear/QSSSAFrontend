@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect } from "react";
 import { useSocket } from "../hooks/useSocket";
 import { AuthContext } from "./AuthContext";
-import { RoomContext } from "./RoomContext";
 import { GroupsContext } from "./groups/GroupsContext";
+import { RoomContext } from "./RoomContext";
 
 export const SocketContext = createContext();
 
@@ -12,7 +12,9 @@ export const SocketProvider = ({ children }) => {
   );
   const { auth } = useContext(AuthContext);
   const { room } = useContext(RoomContext);
-  const { groupsState } = useContext(GroupsContext);
+  const {
+    groupsState: { group },
+  } = useContext(GroupsContext);
 
   useEffect(() => {
     if (auth.logged) {
@@ -29,8 +31,11 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     if (auth.role === "STUDENT_ROLE") {
       getMyGroup(room);
+      if (group?._id) {
+        socket?.emit("join-group", group._id);
+      }
     }
-  }, [auth, room, groupsState, getMyGroup]);
+  }, [auth, room, getMyGroup, socket, group]);
 
   return (
     <SocketContext.Provider value={{ socket, online }}>

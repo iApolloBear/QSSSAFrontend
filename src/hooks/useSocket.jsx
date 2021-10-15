@@ -40,15 +40,12 @@ export const useSocket = (serverPath) => {
 
   const getMyGroup = useCallback(
     async (room) => {
-      const resp = await fetchWithToken(`groups/${room}/my-group`);
       socket?.on("get-my-group", async () => {
+        const resp = await fetchWithToken(`groups/${room}/my-group`);
         if (resp.ok) {
           groupDispatch({ type: types.groupsLoaded, payload: resp.group });
         }
       });
-      if (resp.ok) {
-        socket?.emit("join-group", resp.group._id);
-      }
     },
     [socket, groupDispatch]
   );
