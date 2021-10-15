@@ -61,7 +61,7 @@ export const GroupPage = () => {
 
   const sendMessage = async () => {
     if (message.length === 0) return;
-    socket?.emit("message", { id: room, text: message, user: uid });
+    socket?.emit("message", { id: group._id, text: message, user: uid });
     setMessage("");
   };
 
@@ -74,14 +74,14 @@ export const GroupPage = () => {
   }, [getMyGroup]);
 
   useEffect(() => {
-    getMessages(id);
-  }, [getMessages, id]);
+    getMessages(group?._id);
+  }, [getMessages, group]);
 
   return (
     <main>
       <div className="grp-main">
         <div className="container">
-          <h2 className="text-center top-title-main">{group.name}</h2>
+          <h2 className="text-center mt-4">{group?.name}</h2>
           <div className="d-flex justify-content-between top-title-main">
             <p>{qsssa.qsssa?.accessCode}</p>
             <p>{qsssa.qsssa?.topic}</p>
@@ -95,31 +95,7 @@ export const GroupPage = () => {
             <div className="col-lg-12">
               <div className="justify-content-center row">
                 <div className="col-lg-6">
-                  <div className="py-4 ">
-                    {messagesState?.messages.map((message) =>
-                      message.user._id === uid ? (
-                        <div className="outgoing_msg">
-                          <div className="sent_msg">
-                            <p>{message.text}</p>
-                            <span className="time_date">
-                              {message.user.name}
-                            </span>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="incoming_msg">
-                          <div className="received_msg">
-                            <div className="received_withd_msg">
-                              <p>{message.text}</p>
-                              <span className="time_date">
-                                {message.user.name}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      )
-                    )}
-                  </div>
+                  <div className="py-4 "></div>
                   <div className="questions-custom">
                     <p>While you are waiting think about this question: </p>
                     <h6>Question: {qsssa.qsssa?.question}</h6>
@@ -130,6 +106,75 @@ export const GroupPage = () => {
                         src={`${baseUrl}/upload/qsssas/${id}`}
                         alt={`${qsssa}`}
                       />
+                    )}
+                    <div className="my-5">
+                      {messagesState?.messages?.map((message) =>
+                        message.user._id === uid ? (
+                          <div key={message._id} className="outgoing_msg">
+                            <div className="sent_msg">
+                              <p>{message.text}</p>
+                              <span className="time_date">
+                                {message.user.name}
+                              </span>
+                            </div>
+                          </div>
+                        ) : (
+                          <div key={message._id} className="incoming_msg">
+                            <div className="received_msg">
+                              <div className="received_withd_msg">
+                                <p>{message.text}</p>
+                                <span className="time_date">
+                                  {message.user.name}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>{" "}
+                    {group?.selected?.name ? (
+                      <h3 className="text-center my-5">
+                        {group.selected.name} will go first
+                      </h3>
+                    ) : group ? (
+                      <h3 className="text-center my-5">
+                        The student with the {group?.identifier} will go first
+                      </h3>
+                    ) : (
+                      <></>
+                    )}
+                    {group && (
+                      <div className="col-md-12 col-lg-12">
+                        <div className="form-main multi-group">
+                          <div
+                            style={{ background: group.color }}
+                            className="form-wrap"
+                          >
+                            <h2 className="h5">{group.name}</h2>
+                            <div className="inner-box">
+                              <table>
+                                <thead>
+                                  <tr>
+                                    <th>Student Name:</th>
+                                    <th>Record Status</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {group.users?.map((user) => (
+                                    <tr key={user._id}>
+                                      <td>{user.name}</td>
+                                      <td>
+                                        <i className="far fa-play-circle"></i>
+                                        Pending
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>

@@ -12,7 +12,7 @@ export const SocketProvider = ({ children }) => {
   );
   const { auth } = useContext(AuthContext);
   const { room } = useContext(RoomContext);
-  const { group } = useContext(GroupsContext);
+  const { groupsState } = useContext(GroupsContext);
 
   useEffect(() => {
     if (auth.logged) {
@@ -30,7 +30,7 @@ export const SocketProvider = ({ children }) => {
     if (auth.role === "STUDENT_ROLE") {
       getMyGroup(room);
     }
-  }, [auth, group, room, getMyGroup]);
+  }, [auth, room, groupsState, getMyGroup]);
 
   return (
     <SocketContext.Provider value={{ socket, online }}>
