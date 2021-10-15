@@ -280,6 +280,9 @@ export const GroupPage = () => {
                       placeholder="Enter your message"
                       className="form-control mb-0"
                       name="message"
+                      disabled={
+                        group?.active === false && group?.selected?._id !== uid
+                      }
                       value={message}
                       onChange={onChange}
                     />
