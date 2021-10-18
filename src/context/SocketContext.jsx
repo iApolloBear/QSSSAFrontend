@@ -8,7 +8,7 @@ export const SocketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
   const { socket, online, connectSocket, joinRoom, getMyGroup } = useSocket(
-    "http://localhost:4000"
+    "https://qsssa-backend.herokuapp.com"
   );
   const { auth } = useContext(AuthContext);
   const { room } = useContext(RoomContext);
