@@ -17,6 +17,7 @@ import { types } from "../../types/types";
 export const GroupPage = () => {
   const { id } = useParams();
   const [qsssa, setQSSSA] = useState({});
+  const [ready, setReady] = useState(false);
   const {
     auth: { name, uid },
   } = useContext(AuthContext);
@@ -28,9 +29,7 @@ export const GroupPage = () => {
   } = useContext(GroupsContext);
   const { socket } = useContext(SocketContext);
   const { room, join } = useContext(RoomContext);
-  const [users] = useState(false);
   const [audioURL, isRecording, startRecording, stopRecording] = useRecorder();
-  const [commentView, setCommentView] = useState("");
   const [emoji, setEmoji] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -65,6 +64,10 @@ export const GroupPage = () => {
   };
 
   useEffect(() => {
+    setReady(false);
+  }, [setReady]);
+
+  useEffect(() => {
     getQSSSA(id);
   }, [getQSSSA, id]);
 
@@ -80,7 +83,7 @@ export const GroupPage = () => {
     <main>
       <div className="grp-main">
         <div className="container">
-          <h2 className="text-center mt-4">{group?.name}</h2>
+          <h2 className="text-center mt-4">{ready && group?.name}</h2>
           <div className="d-flex justify-content-between top-title-main">
             <p>{qsssa.qsssa?.accessCode}</p>
             <p>{qsssa.qsssa?.topic}</p>
@@ -107,7 +110,8 @@ export const GroupPage = () => {
                       />
                     )}
                     <div className="my-5">
-                      {group !== undefined &&
+                      {ready &&
+                        group !== undefined &&
                         messagesState?.messages?.map((message) =>
                           message.user._id === uid ? (
                             <div key={message._id} className="outgoing_msg">
@@ -131,19 +135,19 @@ export const GroupPage = () => {
                             </div>
                           )
                         )}
-                    </div>{" "}
-                    {group?.selected?.name ? (
+                    </div>
+                    {ready && group?.selected?.name ? (
                       <h3 className="text-center my-5">
                         {group.selected.name} will go first
                       </h3>
-                    ) : group ? (
+                    ) : ready && group ? (
                       <h3 className="text-center my-5">
                         The student with the {group?.identifier} will go first
                       </h3>
                     ) : (
                       <></>
                     )}
-                    {group && (
+                    {ready && group && (
                       <div className="col-md-12 col-lg-12">
                         <div className="form-main multi-group">
                           <div
@@ -183,40 +187,7 @@ export const GroupPage = () => {
             <div className="col-md-6 col-lg-6">
               <div className="form-main multi-group">
                 <div className="form-wrap">
-                  <h2 className="h5">&nbsp;</h2>
                   <div className="inner-box">
-                    <ul className="mb-5 list-group">
-                      {users &&
-                        qsssa.qsssa?.users &&
-                        qsssa.qsssa.users
-                          .filter((user) => user.name !== name)
-                          .map((user) => (
-                            <div className="list-group-item ">
-                              <div className="d-flex justify-content-between">
-                                <div>{user.name}</div>
-                                <div>
-                                  <i
-                                    style={{ cursor: "pointer" }}
-                                    className="far fa-thumbs-up mx-2"
-                                  ></i>
-                                  <i
-                                    style={{ cursor: "pointer" }}
-                                    className="far fa-comment-alt"
-                                    onClick={() => setCommentView(user._id)}
-                                  ></i>
-                                </div>
-                              </div>
-                              {commentView === user._id && (
-                                <div className="mt-2">
-                                  <input
-                                    className="form-control"
-                                    placeholder="Type a comment"
-                                  />
-                                </div>
-                              )}
-                            </div>
-                          ))}
-                    </ul>
                     <table>
                       <thead>
                         <tr>
@@ -264,6 +235,7 @@ export const GroupPage = () => {
                             <button
                               onClick={() => {
                                 socket.emit("ready", { uid, room });
+                                setReady(true);
                               }}
                               className="btn btn-small btn-primary"
                             >
