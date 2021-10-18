@@ -22,11 +22,9 @@ export const Navbar = () => {
               </Link>
 
               <div className="user-info">
-                {role === "TEACHER_ROLE" && (
-                  <Link to="/qsssas" className="me-4">
-                    QSSSA'S
-                  </Link>
-                )}
+                <Link to="/qsssas" className="me-4">
+                  QSSSA'S
+                </Link>
                 <figure>
                   <img src={Images.person.default} alt="nav-person-icon" />
                 </figure>
