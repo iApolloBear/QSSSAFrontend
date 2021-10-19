@@ -80,7 +80,7 @@ export const GroupPage = () => {
   }, [getMessages]);
 
   return (
-    <main style={{ background: ready ? group?.color : "" }}>
+    <main style={{ background: ready && group?.color ? group?.color : "" }}>
       <div className="grp-main">
         <div className="container">
           <h2 className="text-center pt-4">{ready && group?.name}</h2>
@@ -109,33 +109,45 @@ export const GroupPage = () => {
                         alt={`${qsssa}`}
                       />
                     )}
-                    <div className="my-5">
-                      {ready &&
-                        group !== undefined &&
-                        messagesState?.messages?.map((message) =>
-                          message.user._id === uid ? (
-                            <div key={message._id} className="outgoing_msg">
-                              <div className="sent_msg">
-                                <p>{message.text}</p>
-                                <span className="time_date">
-                                  {message.user.name}
-                                </span>
-                              </div>
-                            </div>
-                          ) : (
-                            <div key={message._id} className="incoming_msg">
-                              <div className="received_msg">
-                                <div className="received_withd_msg">
-                                  <p>{message.text}</p>
-                                  <span className="time_date">
-                                    {message.user.name}
-                                  </span>
+                    {ready && group !== undefined && (
+                      <div className="my-5">
+                        <div className="card">
+                          <div className="card-header">Chat</div>
+                          <div
+                            className="card-body"
+                            style={{
+                              height: "500px",
+                              overflowY: "scroll",
+                              background: group?.color ? group?.color : "",
+                            }}
+                          >
+                            {messagesState?.messages?.map((message) =>
+                              message.user._id === uid ? (
+                                <div key={message._id} className="outgoing_msg">
+                                  <div className="sent_msg">
+                                    <p>{message.text}</p>
+                                    <span className="time_date">
+                                      {message.user.name}
+                                    </span>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-                          )
-                        )}
-                    </div>
+                              ) : (
+                                <div key={message._id} className="incoming_msg">
+                                  <div className="received_msg">
+                                    <div className="received_withd_msg">
+                                      <p>{message.text}</p>
+                                      <span className="time_date">
+                                        {message.user.name}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              )
+                            )}
+                          </div>{" "}
+                        </div>{" "}
+                      </div>
+                    )}{" "}
                     {ready && group?.selected?.name ? (
                       <h3 className="text-center my-5">
                         {group.selected.name} will go first
@@ -151,7 +163,7 @@ export const GroupPage = () => {
                       <div className="col-md-12 col-lg-12">
                         <div className="form-main multi-group">
                           <div
-                            style={{ background: group.color }}
+                            style={{ background: group?.color }}
                             className="form-wrap"
                           >
                             <h2 className="h5">{group.name}</h2>
