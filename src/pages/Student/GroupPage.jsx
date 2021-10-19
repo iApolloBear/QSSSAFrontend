@@ -80,10 +80,10 @@ export const GroupPage = () => {
   }, [getMessages]);
 
   return (
-    <main>
+    <main style={{ background: ready ? group?.color : "" }}>
       <div className="grp-main">
         <div className="container">
-          <h2 className="text-center mt-4">{ready && group?.name}</h2>
+          <h2 className="text-center pt-4">{ready && group?.name}</h2>
           <div className="d-flex justify-content-between top-title-main">
             <p>{qsssa.qsssa?.accessCode}</p>
             <p>{qsssa.qsssa?.topic}</p>
