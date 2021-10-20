@@ -32,6 +32,17 @@ export const GroupPage = () => {
   const [audioURL, isRecording, startRecording, stopRecording] = useRecorder();
   const [emoji, setEmoji] = useState(false);
   const [message, setMessage] = useState("");
+  //console.log(
+  //Array.from(
+  //new Set(messagesState.messages.map((message) => message.user._id))
+  //).map((id) => {
+  //return {
+  //id: id,
+  //name: messagesState.messages.find((message) => message.user._id === id)
+  //.user.name,
+  //};
+  //})
+  //);
 
   const onChange = ({ target }) => setMessage(target.value);
   const onEmojiClick = (e, { emoji }) => setMessage(`${message}${emoji}`);
@@ -176,15 +187,41 @@ export const GroupPage = () => {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {group.users?.map((user) => (
-                                    <tr key={user._id}>
-                                      <td>{user.name}</td>
-                                      <td>
-                                        <i className="far fa-play-circle"></i>
-                                        Pending
-                                      </td>
-                                    </tr>
-                                  ))}
+                                  {group.selected
+                                    ? Array.from(
+                                        new Set(
+                                          messagesState?.messages?.map(
+                                            (message) => message.user._id
+                                          )
+                                        )
+                                      )
+                                        .map((id) => {
+                                          return {
+                                            id: id,
+                                            name: messagesState.messages.find(
+                                              (message) =>
+                                                message.user._id === id
+                                            ).user.name,
+                                          };
+                                        })
+                                        .map((user) => (
+                                          <tr key={user._id}>
+                                            <td>{user.name}</td>
+                                            <td>
+                                              <i className="far fa-play-circle"></i>
+                                              Pending
+                                            </td>
+                                          </tr>
+                                        ))
+                                    : group.users?.map((user) => (
+                                        <tr key={user._id}>
+                                          <td>{user.name}</td>
+                                          <td>
+                                            <i className="far fa-play-circle"></i>
+                                            Pending
+                                          </td>
+                                        </tr>
+                                      ))}
                                 </tbody>
                               </table>
                             </div>
