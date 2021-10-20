@@ -6,6 +6,7 @@ import { PublicRoutes } from "./PublicRoutes";
 import { TeacherRoutes } from "./TeacherRoutes";
 import { StudentRoutes } from "./StudentRoutes";
 import { RoomContext } from "../context/RoomContext";
+import { Dashboard } from "../components/Layout/Dashboard/Dashboard";
 
 export const AppRouter = () => {
   const { auth, verifyToken } = useContext(AuthContext);
@@ -26,11 +27,11 @@ export const AppRouter = () => {
   return (
     <Router>
       {auth.logged ? (
-        <>
+        <Dashboard>
           {auth.role === "ADMIN_ROLE" && <AdminRoutes />}
           {auth.role === "TEACHER_ROLE" && <TeacherRoutes />}
           {auth.role === "STUDENT_ROLE" && <StudentRoutes />}
-        </>
+        </Dashboard>
       ) : (
         <PublicRoutes />
       )}
