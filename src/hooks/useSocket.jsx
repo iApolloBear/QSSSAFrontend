@@ -80,7 +80,7 @@ export const useSocket = (serverPath) => {
     socket?.on("get-qsssa", (qsssa) => {
       qsssaDispatch({ type: types.qsssaLoaded, payload: qsssa });
     });
-  }, [socket]);
+  }, [socket, qsssaDispatch]);
 
   return {
     socket,

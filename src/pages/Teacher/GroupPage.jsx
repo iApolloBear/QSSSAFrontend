@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState, useContext } from "react";
+import { useEffect, useCallback, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { RoomContext } from "../../context/RoomContext";
 import { fetchWithoutToken, baseUrl } from "../../helpers/fetch";
@@ -19,7 +19,7 @@ export const GroupPage = () => {
       join(id);
       dispatch({ type: types.qsssaLoaded, payload: fetchQSSSA.qsssa });
     },
-    [join]
+    [join, dispatch]
   );
 
   useEffect(() => {
