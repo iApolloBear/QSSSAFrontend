@@ -3,6 +3,7 @@ import io from "socket.io-client";
 import { StudentsContext } from "../context/students/StudentsContext";
 import { MessagesContext } from "../context/messages/MessagesContext";
 import { GroupsContext } from "../context/groups/GroupsContext";
+import { QSSSAContext } from "../context/qsssa/QSSSAContext";
 import { types } from "../types/types";
 import { fetchWithToken } from "../helpers/fetch";
 
@@ -12,6 +13,7 @@ export const useSocket = (serverPath) => {
   const { dispatch } = useContext(StudentsContext);
   const { dispatch: messagesDispatch } = useContext(MessagesContext);
   const { dispatch: groupDispatch } = useContext(GroupsContext);
+  const { dispatch: qsssaDispatch } = useContext(QSSSAContext);
 
   const connectSocket = useCallback(() => {
     const token = localStorage.getItem("token");
@@ -73,6 +75,12 @@ export const useSocket = (serverPath) => {
       messagesDispatch({ type: types.messagesLoaded, payload: messages });
     });
   }, [socket, messagesDispatch]);
+
+  useEffect(() => {
+    socket?.on("get-qsssa", (qsssa) => {
+      qsssaDispatch({ type: types.qsssaLoaded, payload: qsssa });
+    });
+  }, [socket]);
 
   return {
     socket,

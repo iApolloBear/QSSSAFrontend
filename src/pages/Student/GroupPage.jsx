@@ -39,7 +39,7 @@ export const GroupPage = () => {
     formData.append("blob", audio);
     formData.append("id", group._id);
     await fetchWithToken("answer", formData, "POST", true);
-    socket?.emit("answer", { id: group._id, user: uid });
+    socket?.emit("answer", { id: group._id, user: uid, accessCode: id });
   };
 
   const onChange = ({ target }) => setMessage(target.value);

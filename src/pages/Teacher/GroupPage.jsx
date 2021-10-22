@@ -1,18 +1,23 @@
 import { useEffect, useCallback, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { RoomContext } from "../../context/RoomContext";
-import { fetchWithoutToken } from "../../helpers/fetch";
+import { fetchWithoutToken, baseUrl } from "../../helpers/fetch";
+import { QSSSAContext } from "../../context/qsssa/QSSSAContext";
+import { types } from "../../types/types";
 
 export const GroupPage = () => {
   const { id } = useParams();
-  const [qsssa, setQSSSA] = useState({});
   const { join } = useContext(RoomContext);
+  const {
+    qsssaState: { qsssa },
+    dispatch,
+  } = useContext(QSSSAContext);
 
   const getQSSSA = useCallback(
     async (id) => {
       const fetchQSSSA = await fetchWithoutToken(`qsssa/${id}`);
       join(id);
-      setQSSSA(fetchQSSSA);
+      dispatch({ type: types.qsssaLoaded, payload: fetchQSSSA.qsssa });
     },
     [join]
   );
@@ -27,10 +32,10 @@ export const GroupPage = () => {
         <div className="container">
           <div className="d-flex justify-content-between top-title-main">
             <p>{id}</p>
-            <p>Topic: {qsssa.qsssa?.topic}</p>
+            <p>Topic: {qsssa?.topic}</p>
           </div>
           <div className="row">
-            {qsssa.qsssa?.groups.map((group) => (
+            {qsssa?.groups?.map((group) => (
               <div key={group._id} className="col-md-6 col-lg-6">
                 <div className="form-main multi-group">
                   <div
@@ -51,7 +56,20 @@ export const GroupPage = () => {
                             <tr key={user._id}>
                               <td>{user.name}</td>
                               <td>
-                                <i className="far fa-play-circle"></i>Pending
+                                {user.answers.length > 0 ? (
+                                  user.answers.map((answer) => (
+                                    <audio
+                                      key={answer._id}
+                                      src={`${baseUrl}/upload/answers/${answer._id}`}
+                                      controls
+                                    ></audio>
+                                  ))
+                                ) : (
+                                  <>
+                                    <i className="far fa-play-circle"></i>
+                                    Pending
+                                  </>
+                                )}
                               </td>
                             </tr>
                           ))}
