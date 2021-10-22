@@ -29,20 +29,18 @@ export const GroupPage = () => {
   } = useContext(GroupsContext);
   const { socket } = useContext(SocketContext);
   const { room, join } = useContext(RoomContext);
-  const [audioURL, isRecording, startRecording, stopRecording] = useRecorder();
+  const [audio, audioURL, isRecording, startRecording, stopRecording] =
+    useRecorder();
   const [emoji, setEmoji] = useState(false);
   const [message, setMessage] = useState("");
-  //console.log(
-  //Array.from(
-  //new Set(messagesState.messages.map((message) => message.user._id))
-  //).map((id) => {
-  //return {
-  //id: id,
-  //name: messagesState.messages.find((message) => message.user._id === id)
-  //.user.name,
-  //};
-  //})
-  //);
+
+  const onSubmit = async () => {
+    const formData = new FormData();
+    formData.append("blob", audio);
+    formData.append("id", group._id);
+    await fetchWithToken("answer", formData, "POST", true);
+    socket?.emit("answer", { id: group._id, user: uid });
+  };
 
   const onChange = ({ target }) => setMessage(target.value);
   const onEmojiClick = (e, { emoji }) => setMessage(`${message}${emoji}`);
@@ -98,11 +96,6 @@ export const GroupPage = () => {
           <div className="d-flex justify-content-between top-title-main">
             <p>{qsssa.qsssa?.accessCode}</p>
             <p>{qsssa.qsssa?.topic}</p>
-          </div>
-          <div className="row">
-            {/*{groups.map((group) => (*/}
-            {/*<span>{group.name}</span>*/}
-            {/*)*/}
           </div>
           <div className="justify-content-center row">
             <div className="col-lg-12">
@@ -217,8 +210,20 @@ export const GroupPage = () => {
                                         <tr key={user._id}>
                                           <td>{user.name}</td>
                                           <td>
-                                            <i className="far fa-play-circle"></i>
-                                            Pending
+                                            {user.answers.length > 0 ? (
+                                              user.answers.map((answer) => (
+                                                <audio
+                                                  key={answer._id}
+                                                  src={`${baseUrl}/upload/answers/${answer._id}`}
+                                                  controls
+                                                ></audio>
+                                              ))
+                                            ) : (
+                                              <>
+                                                <i className="far fa-play-circle"></i>
+                                                Pending
+                                              </>
+                                            )}
                                           </td>
                                         </tr>
                                       ))}
@@ -274,7 +279,10 @@ export const GroupPage = () => {
                                 </>
                               )}
                               {audioURL && (
-                                <button className="btn btn-small btn-secondary">
+                                <button
+                                  onClick={onSubmit}
+                                  className="btn btn-small btn-secondary"
+                                >
                                   Submit
                                 </button>
                               )}
