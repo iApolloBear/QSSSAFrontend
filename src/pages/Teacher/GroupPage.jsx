@@ -57,13 +57,17 @@ export const GroupPage = () => {
                               <td>{user.name}</td>
                               <td>
                                 {user.answers.length > 0 ? (
-                                  user.answers.map((answer) => (
-                                    <audio
-                                      key={answer._id}
-                                      src={`${baseUrl}/upload/answers/${answer._id}`}
-                                      controls
-                                    ></audio>
-                                  ))
+                                  user.answers
+                                    .filter(
+                                      (answer) => group._id == answer.group
+                                    )
+                                    .map((answer) => (
+                                      <audio
+                                        key={answer._id}
+                                        src={`${baseUrl}/upload/answers/${answer._id}`}
+                                        controls
+                                      ></audio>
+                                    ))
                                 ) : (
                                   <>
                                     <i className="far fa-play-circle"></i>

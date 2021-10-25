@@ -31,6 +31,7 @@ export const GroupPage = () => {
   const { room, join } = useContext(RoomContext);
   const [audio, audioURL, isRecording, startRecording, stopRecording] =
     useRecorder();
+  const [available, setAvailable] = useState(false);
   const [emoji, setEmoji] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -257,7 +258,10 @@ export const GroupPage = () => {
                             <span className="rec-main">
                               {isRecording ? (
                                 <button
-                                  onClick={stopRecording}
+                                  onClick={() => {
+                                    setAvailable(true);
+                                    stopRecording();
+                                  }}
                                   className="btn btn-small rec-button"
                                 >
                                   <span>
@@ -268,7 +272,10 @@ export const GroupPage = () => {
                               ) : (
                                 <>
                                   <button
-                                    onClick={startRecording}
+                                    onClick={() => {
+                                      setAvailable(false);
+                                      startRecording();
+                                    }}
                                     className="btn btn-small rec-button"
                                   >
                                     <span>
@@ -278,7 +285,7 @@ export const GroupPage = () => {
                                   </button>
                                 </>
                               )}
-                              {audioURL && (
+                              {available && (
                                 <button
                                   onClick={onSubmit}
                                   className="btn btn-small btn-secondary"
