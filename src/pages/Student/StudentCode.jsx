@@ -1,13 +1,13 @@
 import { useEffect, useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchWithoutToken } from "../../helpers/fetch";
+import { fetchWithToken } from "../../helpers/fetch";
 
 export const StudentCode = () => {
   const { id } = useParams();
   const [qsssa, setQSSSA] = useState({});
 
   const getQSSSA = useCallback(async (id) => {
-    const fetchQSSSA = await fetchWithoutToken(`qsssa/${id}`);
+    const fetchQSSSA = await fetchWithToken(`qsssa/${id}`);
     setQSSSA(fetchQSSSA);
   }, []);
 

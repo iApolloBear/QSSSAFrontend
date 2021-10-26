@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
-import { fetchWithoutToken } from "../../helpers/fetch";
+import { fetchWithToken } from "../../helpers/fetch";
 import { CreateGroupModal } from "../../components/Teacher/CreateGroupModal";
 import { StudentsContext } from "../../context/students/StudentsContext";
 import { RoomContext } from "../../context/RoomContext";
@@ -19,7 +19,7 @@ export const StudentListPage = () => {
 
   const getQSSSA = useCallback(
     async (id) => {
-      const fetchQSSSA = await fetchWithoutToken(`qsssa/${id}`);
+      const fetchQSSSA = await fetchWithToken(`qsssa/${id}`);
       join(id);
       setQSSSA(fetchQSSSA);
     },

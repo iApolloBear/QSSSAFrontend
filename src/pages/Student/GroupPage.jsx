@@ -5,11 +5,7 @@ import { MessagesContext } from "../../context/messages/MessagesContext";
 import { SocketContext } from "../../context/SocketContext";
 import { GroupsContext } from "../../context/groups/GroupsContext";
 import { useParams } from "react-router-dom";
-import {
-  fetchWithoutToken,
-  baseUrl,
-  fetchWithToken,
-} from "../../helpers/fetch";
+import { baseUrl, fetchWithToken } from "../../helpers/fetch";
 import Picker from "emoji-picker-react";
 import useRecorder from "../../hooks/useRecorder";
 import { types } from "../../types/types";
@@ -50,8 +46,9 @@ export const GroupPage = () => {
 
   const getQSSSA = useCallback(
     async (id) => {
-      const fetchQSSSA = await fetchWithoutToken(`qsssa/${id}`);
+      const fetchQSSSA = await fetchWithToken(`qsssa/${id}`);
       join(id);
+      console.log(fetchQSSSA);
       setQSSSA(fetchQSSSA);
     },
     [join]

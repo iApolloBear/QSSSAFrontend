@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { RoomContext } from "../../context/RoomContext";
-import { fetchWithoutToken, baseUrl } from "../../helpers/fetch";
+import { baseUrl, fetchWithToken } from "../../helpers/fetch";
 import { QSSSAContext } from "../../context/qsssa/QSSSAContext";
 import { types } from "../../types/types";
 
@@ -15,7 +15,8 @@ export const GroupPage = () => {
 
   const getQSSSA = useCallback(
     async (id) => {
-      const fetchQSSSA = await fetchWithoutToken(`qsssa/${id}`);
+      const fetchQSSSA = await fetchWithToken(`qsssa/${id}`);
+      console.log(fetchQSSSA);
       join(id);
       dispatch({ type: types.qsssaLoaded, payload: fetchQSSSA.qsssa });
     },
