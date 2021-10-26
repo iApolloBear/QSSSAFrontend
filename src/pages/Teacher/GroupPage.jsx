@@ -59,7 +59,7 @@ export const GroupPage = () => {
                                 {user.answers.length > 0 ? (
                                   user.answers
                                     .filter(
-                                      (answer) => group._id == answer.group
+                                      (answer) => group._id === answer.group
                                     )
                                     .map((answer) => (
                                       <audio

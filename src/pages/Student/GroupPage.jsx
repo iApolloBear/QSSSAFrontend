@@ -13,6 +13,8 @@ import {
 import Picker from "emoji-picker-react";
 import useRecorder from "../../hooks/useRecorder";
 import { types } from "../../types/types";
+import { ChatBox } from "../../components/Student/ChatBox";
+import { GroupMembers } from "../../components/Student/GroupMembers";
 
 export const GroupPage = () => {
   const { id } = useParams();
@@ -115,44 +117,12 @@ export const GroupPage = () => {
                       />
                     )}
                     {ready && group !== undefined && (
-                      <div className="my-5">
-                        <div className="card">
-                          <div className="card-header">Chat</div>
-                          <div
-                            className="card-body"
-                            style={{
-                              height: "500px",
-                              overflowY: "scroll",
-                              background: group?.color ? group?.color : "",
-                            }}
-                          >
-                            {messagesState?.messages?.map((message) =>
-                              message.user._id === uid ? (
-                                <div key={message._id} className="outgoing_msg">
-                                  <div className="sent_msg">
-                                    <p>{message.text}</p>
-                                    <span className="time_date">
-                                      {message.user.name}
-                                    </span>
-                                  </div>
-                                </div>
-                              ) : (
-                                <div key={message._id} className="incoming_msg">
-                                  <div className="received_msg">
-                                    <div className="received_withd_msg">
-                                      <p>{message.text}</p>
-                                      <span className="time_date">
-                                        {message.user.name}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              )
-                            )}
-                          </div>{" "}
-                        </div>{" "}
-                      </div>
-                    )}{" "}
+                      <ChatBox
+                        color={group?.color}
+                        messages={messagesState?.messages}
+                        uid={uid}
+                      />
+                    )}
                     {ready && group?.selected?.name ? (
                       <h3 className="text-center my-5">
                         {group.selected.name} will go first
@@ -165,75 +135,10 @@ export const GroupPage = () => {
                       <></>
                     )}
                     {ready && group && (
-                      <div className="col-md-12 col-lg-12">
-                        <div className="form-main multi-group">
-                          <div
-                            style={{ background: group?.color }}
-                            className="form-wrap"
-                          >
-                            <h2 className="h5">{group.name}</h2>
-                            <div className="inner-box">
-                              <table>
-                                <thead>
-                                  <tr>
-                                    <th>Student Name:</th>
-                                    <th>Record Status</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {group.selected
-                                    ? Array.from(
-                                        new Set(
-                                          messagesState?.messages?.map(
-                                            (message) => message.user._id
-                                          )
-                                        )
-                                      )
-                                        .map((id) => {
-                                          return {
-                                            id: id,
-                                            name: messagesState.messages.find(
-                                              (message) =>
-                                                message.user._id === id
-                                            ).user.name,
-                                          };
-                                        })
-                                        .map((user) => (
-                                          <tr key={user._id}>
-                                            <td>{user.name}</td>
-                                            <td>
-                                              <i className="far fa-play-circle"></i>
-                                              Pending
-                                            </td>
-                                          </tr>
-                                        ))
-                                    : group.users?.map((user) => (
-                                        <tr key={user._id}>
-                                          <td>{user.name}</td>
-                                          <td>
-                                            {user.answers.length > 0 ? (
-                                              user.answers.map((answer) => (
-                                                <audio
-                                                  key={answer._id}
-                                                  src={`${baseUrl}/upload/answers/${answer._id}`}
-                                                  controls
-                                                ></audio>
-                                              ))
-                                            ) : (
-                                              <>
-                                                <i className="far fa-play-circle"></i>
-                                                Pending
-                                              </>
-                                            )}
-                                          </td>
-                                        </tr>
-                                      ))}
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <GroupMembers
+                        group={group}
+                        messages={messagesState?.messages}
+                      />
                     )}
                   </div>
                 </div>
