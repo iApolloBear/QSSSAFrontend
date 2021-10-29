@@ -6,7 +6,7 @@ export const QSSSAListPage = () => {
   const [qsssas, setQSSSAS] = useState([]);
   const history = useHistory();
   const getQSSSAS = useCallback(async () => {
-    const { qsssas } = await fetchWithToken("qsssa/my/qsssas");
+    const { qsssas } = await fetchWithToken("qsssa");
     setQSSSAS(qsssas);
   }, []);
 

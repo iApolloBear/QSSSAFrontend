@@ -9,7 +9,8 @@ export const QSSSAListPage = () => {
   const [qsssas, setQSSSAS] = useState([]);
   const history = useHistory();
   const getQSSSAS = useCallback(async () => {
-    const { qsssas } = await fetchWithToken("qsssa/students/qsssas");
+    const { qsssas } = await fetchWithToken("qsssa");
+    console.log(qsssas);
     setQSSSAS(qsssas);
   }, []);
   const { dispatch } = useContext(MessagesContext);
@@ -51,9 +52,9 @@ export const QSSSAListPage = () => {
                   <tbody>
                     {qsssas.map((qsssa) => (
                       <tr
+                        key={qsssa.id}
                         onDoubleClick={() => go(qsssa.accessCode)}
                         style={{ cursor: "pointer" }}
-                        key={qsssa._id}
                       >
                         <td>{qsssa.topic}</td>
                         <td>{qsssa.question}</td>

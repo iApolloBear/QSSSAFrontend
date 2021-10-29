@@ -45,9 +45,9 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
 
   const createGroups = async () => {
     const resp = await fetchWithoutToken(
-      "groups",
+      "group",
       {
-        qsssaId: id,
+        code: id,
         groups,
         identifier: identifier.length > 0 ? identifier : customIdentifier,
       },

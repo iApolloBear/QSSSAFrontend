@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (name, email = "", password = "", role = "") => {
     const params =
       email && password && role ? { name, email, password, role } : { name };
-    const resp = await fetchWithoutToken("users", params, "POST");
+    const resp = await fetchWithoutToken("auth/register", params, "POST");
 
     if (resp.ok) {
       const { user, token } = resp;
@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
         checking: false,
         logged: true,
         email: user.email,
-        role: user.role,
+        role: user.role.role,
       });
       return resp.ok;
     }
@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const resp = await fetchWithoutToken(
-      "users/login",
+      "auth/login",
       { email, password },
       "POST"
     );
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
         checking: false,
         logged: true,
         email: user.email,
-        role: user.role,
+        role: user.role.role,
       });
     }
     return resp.ok;
@@ -68,17 +68,17 @@ export const AuthProvider = ({ children }) => {
       setAuth({ ...initialState, checking: false });
       return false;
     }
-    const resp = await fetchWithToken("users/renew");
+    const resp = await fetchWithToken("auth/renew");
     if (resp.ok) {
       const { token, user } = resp;
       localStorage.setItem("token", token);
       setAuth({
-        uid: user._id,
+        uid: user.id,
         name: user.name,
         checking: false,
         logged: true,
         emai: user.email,
-        role: user.role,
+        role: user.role.role,
       });
 
       return resp.ok;

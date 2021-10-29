@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useContext } from "react";
+import { useEffect, useCallback, useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { RoomContext } from "../../context/RoomContext";
 import { baseUrl, fetchWithToken } from "../../helpers/fetch";
@@ -12,20 +12,29 @@ export const GroupPage = () => {
     qsssaState: { qsssa },
     dispatch,
   } = useContext(QSSSAContext);
+  const [groups, setGroups] = useState([]);
 
   const getQSSSA = useCallback(
     async (id) => {
       const fetchQSSSA = await fetchWithToken(`qsssa/${id}`);
-      console.log(fetchQSSSA);
       join(id);
       dispatch({ type: types.qsssaLoaded, payload: fetchQSSSA.qsssa });
     },
     [join, dispatch]
   );
 
+  const getGroups = useCallback(async (id) => {
+    const { groups } = await fetchWithToken(`group/${id}`);
+    setGroups(groups);
+  }, []);
+
   useEffect(() => {
     getQSSSA(id);
   }, [getQSSSA, id]);
+
+  useEffect(() => {
+    getGroups(id);
+  }, [getGroups, id]);
 
   return (
     <main>
@@ -36,8 +45,8 @@ export const GroupPage = () => {
             <p>Topic: {qsssa?.topic}</p>
           </div>
           <div className="row">
-            {qsssa?.groups?.map((group) => (
-              <div key={group._id} className="col-md-6 col-lg-6">
+            {groups?.map((group) => (
+              <div key={group.id} className="col-md-6 col-lg-6">
                 <div className="form-main multi-group">
                   <div
                     style={{ background: group.color }}
@@ -53,10 +62,10 @@ export const GroupPage = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {group.users.map((user) => (
-                            <tr key={user._id}>
+                          {group.UsersOnGroups.map(({ user }) => (
+                            <tr key={user.id}>
                               <td>{user.name}</td>
-                              <td>
+                              {/*<td>
                                 {user.answers.length > 0 ? (
                                   user.answers
                                     .filter(
@@ -75,7 +84,7 @@ export const GroupPage = () => {
                                     Pending
                                   </>
                                 )}
-                              </td>
+                              </td>*/}
                             </tr>
                           ))}
                         </tbody>

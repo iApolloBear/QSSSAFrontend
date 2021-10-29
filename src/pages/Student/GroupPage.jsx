@@ -62,9 +62,10 @@ export const GroupPage = () => {
   }, [messageDispatch, group]);
 
   const getMyGroup = useCallback(async () => {
-    const { group } = await fetchWithToken(`groups/${room}/my-group`);
-    groupsDispatch({ type: types.groupsLoaded, payload: group });
-  }, [groupsDispatch, room]);
+    const resp = await fetchWithToken(`student/my-group/${id}`);
+    console.log(resp);
+    //groupsDispatch({ type: types.groupsLoaded, payload: group });
+  }, [id]);
 
   const sendMessage = async () => {
     if (message.length === 0) return;

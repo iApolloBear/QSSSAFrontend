@@ -4,7 +4,7 @@ import { ShareCodePage } from "../pages/Teacher/ShareCodePage";
 import { StudentListPage } from "../pages/Teacher/StudentList";
 import { GroupPage } from "../pages/Teacher/GroupPage";
 import { QSSSAListPage } from "../pages/Teacher/QSSSAListPage";
-import { Students } from "../pages/Admin/Students";
+import { Students } from "../pages/Teacher/Students";
 
 export const TeacherRoutes = () => {
   return (

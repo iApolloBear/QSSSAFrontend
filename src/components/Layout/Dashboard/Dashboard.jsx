@@ -3,31 +3,29 @@ import { AuthContext } from "../../../context/AuthContext";
 import { Link, NavLink } from "react-router-dom";
 
 export const Dashboard = ({ children }) => {
-  const { auth, logout } = useContext(AuthContext);
+  const {
+    auth: { name, role },
+    logout,
+  } = useContext(AuthContext);
 
   return (
     <div className="dashboard">
       <div className="sidebar">
         <div className="sidebar-background"></div>
         <div className="sidebar-wrapper">
-          <div className="logo d-flex align-items-center justify-content-start">
+          <div className="logo d-flex flex-column align-items-start justify-content-start">
             <Link className="simple-text" to="/">
               QSSSA
             </Link>
+            <span className="simple-text text-start">
+              {role === "STUDENT_ROLE" && `Student: ${name}`}
+              {role === "TEACHER_ROLE" && `Teacher: ${name}`}
+              {role === "ADMIN_ROLE" && `Admin: ${name}`}
+            </span>
           </div>
           <div className="nav">
-            {auth.role === "STUDENT_ROLE" && (
+            {role === "STUDENT_ROLE" && (
               <>
-                <li>
-                  <NavLink
-                    exact
-                    className="nav-link"
-                    to="/teachers"
-                    activeClassName="active"
-                  >
-                    Teachers
-                  </NavLink>
-                </li>
                 <li>
                   <NavLink
                     exact
@@ -50,7 +48,7 @@ export const Dashboard = ({ children }) => {
                 </li>
               </>
             )}
-            {auth.role === "TEACHER_ROLE" && (
+            {role === "TEACHER_ROLE" && (
               <>
                 <li>
                   <NavLink
@@ -84,7 +82,7 @@ export const Dashboard = ({ children }) => {
                 </li>
               </>
             )}
-            {auth.role === "ADMIN_ROLE" && (
+            {role === "ADMIN_ROLE" && (
               <>
                 <li>
                   <NavLink

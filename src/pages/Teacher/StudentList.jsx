@@ -4,6 +4,7 @@ import { fetchWithToken } from "../../helpers/fetch";
 import { CreateGroupModal } from "../../components/Teacher/CreateGroupModal";
 import { StudentsContext } from "../../context/students/StudentsContext";
 import { RoomContext } from "../../context/RoomContext";
+import { types } from "../../types/types";
 
 export const StudentListPage = () => {
   const { id } = useParams();
@@ -11,6 +12,7 @@ export const StudentListPage = () => {
   const [show, setShow] = useState(false);
   const {
     studentsState: { students },
+    dispatch,
   } = useContext(StudentsContext);
   const { join } = useContext(RoomContext);
 
@@ -26,9 +28,21 @@ export const StudentListPage = () => {
     [join]
   );
 
+  const getStudents = useCallback(
+    async (id) => {
+      const { students } = await fetchWithToken(`teacher/qsssa/students/${id}`);
+      dispatch({ type: types.studentsLoaded, payload: students });
+    },
+    [dispatch]
+  );
+
   useEffect(() => {
     getQSSSA(id);
   }, [getQSSSA, id]);
+
+  useEffect(() => {
+    getStudents(id);
+  }, [getStudents, id]);
 
   return (
     <main>
@@ -44,9 +58,9 @@ export const StudentListPage = () => {
                 <div className="inner-box">
                   <ul>
                     <li>Student Name</li>
-                    {students?.map((user) => (
-                      <li key={user._id}>
-                        {user.ready && <i className="fas fa-check"></i>}{" "}
+                    {students?.map(({ user }) => (
+                      <li key={user.id}>
+                        {user.ready && <i className="fas fa-check"></i>}
                         {user.name}
                       </li>
                     ))}
