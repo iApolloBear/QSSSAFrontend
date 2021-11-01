@@ -38,9 +38,9 @@ export const QSSSAListPage = () => {
                   <tbody>
                     {qsssas.map((qsssa) => (
                       <tr
+                        key={qsssa.id}
                         onDoubleClick={() => go(qsssa.accessCode)}
                         style={{ cursor: "pointer" }}
-                        key={qsssa._id}
                       >
                         <td>{qsssa.topic}</td>
                         <td>{qsssa.question}</td>
