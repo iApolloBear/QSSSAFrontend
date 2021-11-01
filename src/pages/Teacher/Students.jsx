@@ -4,8 +4,9 @@ import { fetchWithToken } from "../../helpers/fetch";
 export const Students = () => {
   const [students, setStudents] = useState([]);
   const getStudents = useCallback(async () => {
-    const { qsssas } = await fetchWithToken("qsssa/my/qsssas");
-    setStudents(qsssas.map((qsssa) => qsssa.users).flat());
+    const { students } = await fetchWithToken("teacher/students");
+    console.log(students);
+    setStudents(students);
   }, []);
 
   useEffect(() => {
@@ -25,18 +26,12 @@ export const Students = () => {
               </tr>
             </thead>
             <tbody>
-              {Array.from(new Set(students.map((student) => student._id)))
-                .map((id) => ({
-                  id: id,
-                  name: students.find((student) => student._id === id).name,
-                  email: students.find((student) => student._id === id).email,
-                }))
-                .map((student) => (
-                  <tr key={student.id}>
-                    <td>{student.name}</td>
-                    {student.email ? <td>{student.email}</td> : <td>Guest</td>}
-                  </tr>
-                ))}
+              {students.map(({ user }) => (
+                <tr key={user.id}>
+                  <td>{user.name}</td>
+                  {user.email ? <td>{user.email}</td> : <td>Guest</td>}
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
