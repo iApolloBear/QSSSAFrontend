@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import { fetchWithToken } from "../../helpers/fetch";
 import { CreateGroupModal } from "../../components/Teacher/CreateGroupModal";
 import { StudentsContext } from "../../context/students/StudentsContext";
-import { RoomContext } from "../../context/RoomContext";
 import { types } from "../../types/types";
+import { SocketContext } from "../../context/SocketContext";
 
 export const StudentListPage = () => {
   const { id } = useParams();
@@ -14,18 +14,21 @@ export const StudentListPage = () => {
     studentsState: { students },
     dispatch,
   } = useContext(StudentsContext);
-  const { join } = useContext(RoomContext);
+  const { socket } = useContext(SocketContext);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const getQSSSA = useCallback(
-    async (id) => {
-      const fetchQSSSA = await fetchWithToken(`qsssa/${id}`);
-      join(id);
-      setQSSSA(fetchQSSSA);
+  const getQSSSA = useCallback(async (id) => {
+    const { qsssa } = await fetchWithToken(`qsssa/${id}`);
+    setQSSSA(qsssa);
+  }, []);
+
+  const joinRoom = useCallback(
+    (id) => {
+      socket?.emit("join", id);
     },
-    [join]
+    [socket]
   );
 
   const getStudents = useCallback(
@@ -35,6 +38,11 @@ export const StudentListPage = () => {
     },
     [dispatch]
   );
+
+  useEffect(() => {
+    joinRoom(id);
+    return () => socket?.emit("leave", id);
+  }, [joinRoom, id]);
 
   useEffect(() => {
     getQSSSA(id);
@@ -48,8 +56,8 @@ export const StudentListPage = () => {
     <main>
       <div className="container">
         <div className="d-flex justify-content-between top-title-main">
-          <p>{qsssa.qsssa?.question}</p>
-          <p>Topic: {qsssa.qsssa?.topic}</p>
+          <p>{qsssa?.question}</p>
+          <p>Topic: {qsssa?.topic}</p>
         </div>
         <div className="justify-content-center row">
           <div className="col-lg-7">

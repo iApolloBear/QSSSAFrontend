@@ -65,7 +65,8 @@ export const useSocket = (serverPath) => {
   }, [socket]);
 
   useEffect(() => {
-    socket?.on("list-users", (users) => {
+    socket?.on("get-students", (users) => {
+      console.log(users);
       dispatch({ type: types.studentsLoaded, payload: users });
     });
   }, [socket, dispatch]);

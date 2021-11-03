@@ -1,6 +1,5 @@
 import { useEffect, useCallback, useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { RoomContext } from "../../context/RoomContext";
 import { MessagesContext } from "../../context/messages/MessagesContext";
 import { SocketContext } from "../../context/SocketContext";
 import { useParams } from "react-router-dom";
@@ -22,7 +21,6 @@ export const GroupPage = () => {
   const { messagesState, dispatch: messageDispatch } =
     useContext(MessagesContext);
   const { socket } = useContext(SocketContext);
-  const { room, join } = useContext(RoomContext);
   const [audio, audioURL, isRecording, startRecording, stopRecording] =
     useRecorder();
   const [available, setAvailable] = useState(false);
@@ -34,20 +32,23 @@ export const GroupPage = () => {
     formData.append("blob", audio);
     formData.append("id", group?.id);
     const resp = await fetchWithToken("answer", formData, "POST", true);
-    console.log(resp);
     //socket?.emit("answer", { id: group._id, user: uid, accessCode: id });
   };
 
   const onChange = ({ target }) => setMessage(target.value);
   const onEmojiClick = (e, { emoji }) => setMessage(`${message}${emoji}`);
 
-  const getQSSSA = useCallback(
-    async (id) => {
-      const fetchQSSSA = await fetchWithToken(`qsssa/${id}`);
-      join(id);
-      setQSSSA(fetchQSSSA);
+  const getQSSSA = useCallback(async (id) => {
+    const fetchQSSSA = await fetchWithToken(`qsssa/${id}`);
+    console.log(fetchQSSSA);
+    setQSSSA(fetchQSSSA);
+  }, []);
+
+  const joinRoom = useCallback(
+    (id) => {
+      socket?.emit("join", id);
     },
-    [join]
+    [socket]
   );
 
   const getMessages = useCallback(async () => {
@@ -70,9 +71,13 @@ export const GroupPage = () => {
       { text: message, groupId: group?.id },
       "POST"
     );
-    console.log(resp);
     setMessage("");
   };
+
+  useEffect(() => {
+    joinRoom(id);
+    return socket?.emit("leave", id);
+  }, [id]);
 
   useEffect(() => {
     setReady(false);
@@ -202,7 +207,7 @@ export const GroupPage = () => {
                           <td>
                             <button
                               onClick={() => {
-                                socket.emit("ready", { uid, room });
+                                socket.emit("ready", { uid });
                                 setReady(true);
                               }}
                               className="btn btn-small btn-primary"

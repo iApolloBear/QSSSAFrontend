@@ -3,7 +3,6 @@ import { Modal } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { SocketContext } from "../../context/SocketContext";
 import { fetchWithoutToken } from "../../helpers/fetch";
-import { RoomContext } from "../../context/RoomContext";
 
 export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
   const history = useHistory();
@@ -12,7 +11,6 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
   const [identifier, setIdentifier] = useState("");
   const [customIdentifier, setCustomIdentifier] = useState("");
   const { socket } = useContext(SocketContext);
-  const { room } = useContext(RoomContext);
 
   const onChange = ({ target }) => setOption(target.id);
 
@@ -54,7 +52,7 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
       "POST"
     );
 
-    socket?.emit("get-groups", room);
+    //socket?.emit("get-groups", room);
 
     if (resp.ok) {
       history.push(`/group/${id}`);

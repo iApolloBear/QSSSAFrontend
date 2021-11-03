@@ -1,13 +1,11 @@
 import { useEffect, useCallback, useContext, useState } from "react";
 import { useParams } from "react-router-dom";
-import { RoomContext } from "../../context/RoomContext";
 import { baseUrl, fetchWithToken } from "../../helpers/fetch";
 import { QSSSAContext } from "../../context/qsssa/QSSSAContext";
 import { types } from "../../types/types";
 
 export const GroupPage = () => {
   const { id } = useParams();
-  const { join } = useContext(RoomContext);
   const {
     qsssaState: { qsssa },
     dispatch,
@@ -17,10 +15,9 @@ export const GroupPage = () => {
   const getQSSSA = useCallback(
     async (id) => {
       const fetchQSSSA = await fetchWithToken(`qsssa/${id}`);
-      join(id);
       dispatch({ type: types.qsssaLoaded, payload: fetchQSSSA.qsssa });
     },
-    [join, dispatch]
+    [dispatch]
   );
 
   const getGroups = useCallback(async (id) => {
