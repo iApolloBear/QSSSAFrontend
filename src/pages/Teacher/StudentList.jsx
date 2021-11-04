@@ -2,18 +2,18 @@ import { useEffect, useCallback, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { fetchWithToken } from "../../helpers/fetch";
 import { CreateGroupModal } from "../../components/Teacher/CreateGroupModal";
-import { StudentsContext } from "../../context/students/StudentsContext";
 import { types } from "../../types/types";
 import { SocketContext } from "../../context/SocketContext";
+import { AppContext } from "../../context/AppContext";
 
 export const StudentListPage = () => {
   const { id } = useParams();
   const [qsssa, setQSSSA] = useState({});
   const [show, setShow] = useState(false);
   const {
-    studentsState: { students },
+    appState: { students },
     dispatch,
-  } = useContext(StudentsContext);
+  } = useContext(AppContext);
   const { socket } = useContext(SocketContext);
 
   const handleClose = () => setShow(false);

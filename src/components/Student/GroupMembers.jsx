@@ -1,17 +1,11 @@
-import { useState, useEffect, useCallback } from "react";
-import { baseUrl, fetchWithToken } from "../../helpers/fetch";
+import { useContext } from "react";
+import { baseUrl } from "../../helpers/fetch";
+import { AppContext } from "../../context/AppContext";
 
 export const GroupMembers = ({ group }) => {
-  const [users, setUsers] = useState([]);
-
-  const getMembers = useCallback(async () => {
-    const { users } = await fetchWithToken(`message/members/${group.id}`);
-    setUsers(users);
-  }, []);
-
-  useEffect(() => {
-    getMembers();
-  }, [getMembers]);
+  const {
+    appState: { userMessages },
+  } = useContext(AppContext);
 
   return (
     <div className="col-md-12 col-lg-12">
@@ -28,7 +22,7 @@ export const GroupMembers = ({ group }) => {
               </thead>
               <tbody>
                 {group.selected
-                  ? users.map(({ user }) => (
+                  ? userMessages.map(({ user }) => (
                       <tr key={user.id}>
                         <td>{user.name}</td>
                         <td>
@@ -52,7 +46,7 @@ export const GroupMembers = ({ group }) => {
                         </td>
                       </tr>
                     ))
-                  : group.UsersOnGroups?.map(({ user }) => (
+                  : userMessages.map(({ user }) => (
                       <tr key={user.id}>
                         <td>{user.name}</td>
                         <td>

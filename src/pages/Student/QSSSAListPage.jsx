@@ -1,30 +1,16 @@
-import { useCallback, useEffect, useState, useContext } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { MessagesContext } from "../../context/messages/MessagesContext";
-import { GroupsContext } from "../../context/groups/GroupsContext";
 import { fetchWithToken } from "../../helpers/fetch";
-import { types } from "../../types/types";
 
 export const QSSSAListPage = () => {
   const [qsssas, setQSSSAS] = useState([]);
   const history = useHistory();
   const getQSSSAS = useCallback(async () => {
     const { qsssas } = await fetchWithToken("qsssa");
-    console.log(qsssas);
     setQSSSAS(qsssas);
   }, []);
-  const { dispatch } = useContext(MessagesContext);
-  const { dispatch: groupsDispatch } = useContext(GroupsContext);
 
   const go = (code) => {
-    dispatch({
-      type: types.messagesLoaded,
-      payload: [],
-    });
-    groupsDispatch({
-      type: types.groupsLoaded,
-      dispatch: {},
-    });
     history.push(`group/${code}`);
   };
 

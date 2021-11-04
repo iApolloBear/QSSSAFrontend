@@ -1,8 +1,6 @@
 import { useEffect, useCallback, useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { MessagesContext } from "../../context/messages/MessagesContext";
 import { SocketContext } from "../../context/SocketContext";
-import { GroupsContext } from "../../context/groups/GroupsContext";
 import { useParams } from "react-router-dom";
 import { baseUrl, fetchWithToken } from "../../helpers/fetch";
 import Picker from "emoji-picker-react";
@@ -10,6 +8,7 @@ import useRecorder from "../../hooks/useRecorder";
 import { types } from "../../types/types";
 import { ChatBox } from "../../components/Student/ChatBox";
 import { GroupMembers } from "../../components/Student/GroupMembers";
+import { AppContext } from "../../context/AppContext";
 
 export const GroupPage = () => {
   const { id } = useParams();
@@ -19,13 +18,9 @@ export const GroupPage = () => {
     auth: { name, uid },
   } = useContext(AuthContext);
   const {
-    groupsState: { group },
-    dispatch: groupDispatch,
-  } = useContext(GroupsContext);
-  const {
-    messagesState: { messages },
-    dispatch: messageDispatch,
-  } = useContext(MessagesContext);
+    appState: { group, messages },
+    dispatch,
+  } = useContext(AppContext);
   const { socket } = useContext(SocketContext);
   const [audio, audioURL, isRecording, startRecording, stopRecording] =
     useRecorder();
@@ -56,15 +51,14 @@ export const GroupPage = () => {
     [socket]
   );
 
-  const getMessages = useCallback(async () => {
-    const { messages } = await fetchWithToken(`message/${group?.id}`);
-    messageDispatch({ type: types.messagesLoaded, payload: messages });
-  }, [messageDispatch, group]);
-
   const getMyGroup = useCallback(async () => {
     const { group } = await fetchWithToken(`student/my-group/${id}`);
-    groupDispatch({ type: types.groupsLoaded, payload: group });
-  }, [id, groupDispatch]);
+    const { messages } = await fetchWithToken(`message/${group.id}`);
+    const { users } = await fetchWithToken(`message/members/${group.id}`);
+    dispatch({ type: types.groupLoaded, payload: group });
+    dispatch({ type: types.messagesLoaded, payload: messages });
+    dispatch({ type: types.userMessagesLoaded, payload: users });
+  }, [id, dispatch]);
 
   const sendMessage = async () => {
     if (message.length === 0) return;
@@ -94,10 +88,6 @@ export const GroupPage = () => {
   useEffect(() => {
     getMyGroup();
   }, [getMyGroup]);
-
-  useEffect(() => {
-    getMessages();
-  }, [getMessages]);
 
   return (
     <main style={{ background: ready && group?.color ? group?.color : "" }}>
