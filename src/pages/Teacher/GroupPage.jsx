@@ -3,9 +3,11 @@ import { useParams } from "react-router-dom";
 import { baseUrl, fetchWithToken } from "../../helpers/fetch";
 import { QSSSAContext } from "../../context/qsssa/QSSSAContext";
 import { types } from "../../types/types";
+import { SocketContext } from "../../context/SocketContext";
 
 export const GroupPage = () => {
   const { id } = useParams();
+  const { socket } = useContext(SocketContext);
   const {
     qsssaState: { qsssa },
     dispatch,
@@ -20,10 +22,22 @@ export const GroupPage = () => {
     [dispatch]
   );
 
+  const joinRoom = useCallback(
+    (id) => {
+      socket?.emit("join", id);
+    },
+    [socket]
+  );
+
   const getGroups = useCallback(async (id) => {
     const { groups } = await fetchWithToken(`group/${id}`);
     setGroups(groups);
   }, []);
+
+  useEffect(() => {
+    joinRoom(id);
+    return () => socket?.emit("leave", id);
+  }, [joinRoom, id, socket]);
 
   useEffect(() => {
     getQSSSA(id);
@@ -62,26 +76,22 @@ export const GroupPage = () => {
                           {group.UsersOnGroups.map(({ user }) => (
                             <tr key={user.id}>
                               <td>{user.name}</td>
-                              {/*<td>
-                                {user.answers.length > 0 ? (
-                                  user.answers
-                                    .filter(
-                                      (answer) => group._id === answer.group
-                                    )
-                                    .map((answer) => (
-                                      <audio
-                                        key={answer._id}
-                                        src={`${baseUrl}/upload/answers/${answer._id}`}
-                                        controls
-                                      ></audio>
-                                    ))
+                              <td>
+                                {user.Answer.length > 0 ? (
+                                  user.Answer.map((answer) => (
+                                    <audio
+                                      key={answer.id}
+                                      src={`${baseUrl}/upload/answers/${answer.id}`}
+                                      controls
+                                    ></audio>
+                                  ))
                                 ) : (
                                   <>
                                     <i className="far fa-play-circle"></i>
                                     Pending
                                   </>
                                 )}
-                              </td>*/}
+                              </td>
                             </tr>
                           ))}
                         </tbody>

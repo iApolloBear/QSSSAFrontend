@@ -52,7 +52,7 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
       "POST"
     );
 
-    //socket?.emit("get-groups", room);
+    socket?.emit("get-groups", id);
 
     if (resp.ok) {
       history.push(`/group/${id}`);

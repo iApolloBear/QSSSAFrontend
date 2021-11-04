@@ -66,7 +66,6 @@ export const useSocket = (serverPath) => {
 
   useEffect(() => {
     socket?.on("get-students", (users) => {
-      console.log(users);
       dispatch({ type: types.studentsLoaded, payload: users });
     });
   }, [socket, dispatch]);
@@ -82,6 +81,13 @@ export const useSocket = (serverPath) => {
       qsssaDispatch({ type: types.qsssaLoaded, payload: qsssa });
     });
   }, [socket, qsssaDispatch]);
+
+  useEffect(() => {
+    socket?.on("get-my-group", async (id) => {
+      const { group } = await fetchWithToken(`student/my-group/${id}`);
+      groupDispatch({ type: types.groupsLoaded, payload: group });
+    });
+  }, [socket, groupDispatch]);
 
   return {
     socket,

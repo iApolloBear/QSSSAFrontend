@@ -42,7 +42,7 @@ export const StudentListPage = () => {
   useEffect(() => {
     joinRoom(id);
     return () => socket?.emit("leave", id);
-  }, [joinRoom, id]);
+  }, [joinRoom, id, socket]);
 
   useEffect(() => {
     getQSSSA(id);

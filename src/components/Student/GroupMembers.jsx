@@ -1,6 +1,18 @@
-import { baseUrl } from "../../helpers/fetch";
+import { useState, useEffect, useCallback } from "react";
+import { baseUrl, fetchWithToken } from "../../helpers/fetch";
 
 export const GroupMembers = ({ group }) => {
+  const [users, setUsers] = useState([]);
+
+  const getMembers = useCallback(async () => {
+    const { users } = await fetchWithToken(`message/members/${group.id}`);
+    setUsers(users);
+  }, []);
+
+  useEffect(() => {
+    getMembers();
+  }, [getMembers]);
+
   return (
     <div className="col-md-12 col-lg-12">
       <div className="form-main multi-group">
@@ -16,7 +28,7 @@ export const GroupMembers = ({ group }) => {
               </thead>
               <tbody>
                 {group.selected
-                  ? group.Message.map(({ user }) => (
+                  ? users.map(({ user }) => (
                       <tr key={user.id}>
                         <td>{user.name}</td>
                         <td>

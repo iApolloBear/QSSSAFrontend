@@ -3,25 +3,19 @@ import { useParams } from "react-router-dom";
 import { baseUrl, fetchWithToken } from "../../helpers/fetch";
 import { ShareLinkModal } from "../../components/Teacher/ShareLinkModal";
 import { Link } from "react-router-dom";
-import { RoomContext } from "../../context/RoomContext";
 
 export const ShareCodePage = () => {
   const { id } = useParams();
   const [qsssa, setQSSSA] = useState({});
   const [show, setShow] = useState(false);
-  const { join } = useContext(RoomContext);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const getQSSSA = useCallback(
-    async (id) => {
-      const fetchQSSSA = await fetchWithToken(`qsssa/${id}`);
-      join(id);
-      setQSSSA(fetchQSSSA);
-    },
-    [join]
-  );
+  const getQSSSA = useCallback(async (id) => {
+    const fetchQSSSA = await fetchWithToken(`qsssa/${id}`);
+    setQSSSA(fetchQSSSA);
+  }, []);
 
   useEffect(() => {
     getQSSSA(id);

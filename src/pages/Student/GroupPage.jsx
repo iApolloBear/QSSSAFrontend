@@ -2,6 +2,7 @@ import { useEffect, useCallback, useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { MessagesContext } from "../../context/messages/MessagesContext";
 import { SocketContext } from "../../context/SocketContext";
+import { GroupsContext } from "../../context/groups/GroupsContext";
 import { useParams } from "react-router-dom";
 import { baseUrl, fetchWithToken } from "../../helpers/fetch";
 import Picker from "emoji-picker-react";
@@ -13,13 +14,18 @@ import { GroupMembers } from "../../components/Student/GroupMembers";
 export const GroupPage = () => {
   const { id } = useParams();
   const [qsssa, setQSSSA] = useState({});
-  const [group, setGroup] = useState({});
   const [ready, setReady] = useState(false);
   const {
     auth: { name, uid },
   } = useContext(AuthContext);
-  const { messagesState, dispatch: messageDispatch } =
-    useContext(MessagesContext);
+  const {
+    groupsState: { group },
+    dispatch: groupDispatch,
+  } = useContext(GroupsContext);
+  const {
+    messagesState: { messages },
+    dispatch: messageDispatch,
+  } = useContext(MessagesContext);
   const { socket } = useContext(SocketContext);
   const [audio, audioURL, isRecording, startRecording, stopRecording] =
     useRecorder();
@@ -30,7 +36,7 @@ export const GroupPage = () => {
   const onSubmit = async () => {
     const formData = new FormData();
     formData.append("blob", audio);
-    formData.append("id", group?.id);
+    formData.append("groupId", group?.id);
     const resp = await fetchWithToken("answer", formData, "POST", true);
     //socket?.emit("answer", { id: group._id, user: uid, accessCode: id });
   };
@@ -40,7 +46,6 @@ export const GroupPage = () => {
 
   const getQSSSA = useCallback(async (id) => {
     const fetchQSSSA = await fetchWithToken(`qsssa/${id}`);
-    console.log(fetchQSSSA);
     setQSSSA(fetchQSSSA);
   }, []);
 
@@ -52,17 +57,14 @@ export const GroupPage = () => {
   );
 
   const getMessages = useCallback(async () => {
-    if (group?._id) {
-      const { messages } = await fetchWithToken(`messages/${group?._id}`);
-      messageDispatch({ type: types.messagesLoaded, payload: messages });
-    }
+    const { messages } = await fetchWithToken(`message/${group?.id}`);
+    messageDispatch({ type: types.messagesLoaded, payload: messages });
   }, [messageDispatch, group]);
 
   const getMyGroup = useCallback(async () => {
     const { group } = await fetchWithToken(`student/my-group/${id}`);
-    console.log(group);
-    setGroup(group);
-  }, [id]);
+    groupDispatch({ type: types.groupsLoaded, payload: group });
+  }, [id, groupDispatch]);
 
   const sendMessage = async () => {
     if (message.length === 0) return;
@@ -71,13 +73,15 @@ export const GroupPage = () => {
       { text: message, groupId: group?.id },
       "POST"
     );
+    console.log(resp);
+    socket?.emit("send-message", { id: group?.id });
     setMessage("");
   };
 
   useEffect(() => {
     joinRoom(id);
-    return socket?.emit("leave", id);
-  }, [id]);
+    return () => socket?.emit("leave", id);
+  }, [joinRoom, id, socket]);
 
   useEffect(() => {
     setReady(false);
@@ -123,7 +127,7 @@ export const GroupPage = () => {
                     {ready && group !== undefined && (
                       <ChatBox
                         color={group?.color}
-                        messages={group?.Message}
+                        messages={messages}
                         uid={uid}
                       />
                     )}
@@ -139,10 +143,7 @@ export const GroupPage = () => {
                       <></>
                     )}
                     {ready && group && (
-                      <GroupMembers
-                        group={group}
-                        messages={messagesState?.messages}
-                      />
+                      <GroupMembers group={group} messages={messages} />
                     )}
                   </div>
                 </div>

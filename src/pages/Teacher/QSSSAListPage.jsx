@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { fetchWithToken } from "../../helpers/fetch";
+import { formatDate } from "../../helpers/formatDate";
 
 export const QSSSAListPage = () => {
   const [qsssas, setQSSSAS] = useState([]);
@@ -33,15 +34,12 @@ export const QSSSAListPage = () => {
                       <th>Question</th>
                       <th>Sentence Stem</th>
                       <th>Access Code</th>
+                      <th>Created Date</th>
                     </tr>
                   </thead>
                   <tbody>
                     {qsssas.map((qsssa) => (
-                      <tr
-                        key={qsssa.id}
-                        onDoubleClick={() => go(qsssa.accessCode)}
-                        style={{ cursor: "pointer" }}
-                      >
+                      <tr key={qsssa.id}>
                         <td>{qsssa.topic}</td>
                         <td>{qsssa.question}</td>
                         {qsssa.sentenceStem ? (
@@ -50,6 +48,15 @@ export const QSSSAListPage = () => {
                           <td>None</td>
                         )}
                         <td>{qsssa.accessCode}</td>
+                        <td>{formatDate(qsssa.createdAt)}</td>
+                        <td>
+                          <button
+                            className="btn btn-primary btn-small"
+                            onClick={() => go(qsssa.accessCode)}
+                          >
+                            View Details
+                          </button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
