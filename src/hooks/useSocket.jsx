@@ -45,11 +45,18 @@ export const useSocket = (serverPath) => {
     });
   }, [socket, dispatch]);
 
-  //useEffect(() => {
-  //socket?.on("group-message", (messages) => {
-  //messagesDispatch({ type: types.messagesLoaded, payload: messages });
-  //});
-  //}, [socket, messagesDispatch]);
+  useEffect(() => {
+    socket?.on("get-messages", ({ messages, group }) => {
+      dispatch({ type: types.messagesLoaded, payload: messages });
+      dispatch({ type: types.groupLoaded, payload: group });
+    });
+  }, [socket, dispatch]);
+
+  useEffect(() => {
+    socket?.on("user-messages", (users) => {
+      dispatch({ type: types.userMessagesLoaded, payload: users });
+    });
+  }, [socket, dispatch]);
 
   //useEffect(() => {
   //socket?.on("get-qsssa", (qsssa) => {
@@ -60,6 +67,7 @@ export const useSocket = (serverPath) => {
   useEffect(() => {
     socket?.on("get-my-group", async (id) => {
       const { group } = await fetchWithToken(`student/my-group/${id}`);
+      socket?.emit("join-group", id);
       dispatch({ type: types.groupLoaded, payload: group });
     });
   }, [socket, dispatch]);

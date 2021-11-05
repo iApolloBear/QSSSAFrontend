@@ -13,6 +13,9 @@ export const appReducer = (state, action) => {
     case types.userMessagesLoaded: {
       return { ...state, userMessages: action.payload };
     }
+    case types.groupsLoaded: {
+      return { ...state, groups: action.payload };
+    }
     default:
       return state;
   }

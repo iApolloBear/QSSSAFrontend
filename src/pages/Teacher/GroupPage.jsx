@@ -1,26 +1,23 @@
 import { useEffect, useCallback, useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { baseUrl, fetchWithToken } from "../../helpers/fetch";
-import { QSSSAContext } from "../../context/qsssa/QSSSAContext";
 import { types } from "../../types/types";
 import { SocketContext } from "../../context/SocketContext";
+import { AppContext } from "../../context/AppContext";
 
 export const GroupPage = () => {
   const { id } = useParams();
   const { socket } = useContext(SocketContext);
   const {
-    qsssaState: { qsssa },
+    appState: { groups },
     dispatch,
-  } = useContext(QSSSAContext);
-  const [groups, setGroups] = useState([]);
+  } = useContext(AppContext);
+  const [qsssa, setQSSSA] = useState({});
 
-  const getQSSSA = useCallback(
-    async (id) => {
-      const fetchQSSSA = await fetchWithToken(`qsssa/${id}`);
-      dispatch({ type: types.qsssaLoaded, payload: fetchQSSSA.qsssa });
-    },
-    [dispatch]
-  );
+  const getQSSSA = useCallback(async (id) => {
+    const { qsssa } = await fetchWithToken(`qsssa/${id}`);
+    setQSSSA(qsssa);
+  }, []);
 
   const joinRoom = useCallback(
     (id) => {
@@ -29,10 +26,13 @@ export const GroupPage = () => {
     [socket]
   );
 
-  const getGroups = useCallback(async (id) => {
-    const { groups } = await fetchWithToken(`group/${id}`);
-    setGroups(groups);
-  }, []);
+  const getGroups = useCallback(
+    async (id) => {
+      const { groups } = await fetchWithToken(`group/${id}`);
+      dispatch({ type: types.groupsLoaded, payload: groups });
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     joinRoom(id);

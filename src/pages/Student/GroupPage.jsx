@@ -53,22 +53,24 @@ export const GroupPage = () => {
 
   const getMyGroup = useCallback(async () => {
     const { group } = await fetchWithToken(`student/my-group/${id}`);
-    const { messages } = await fetchWithToken(`message/${group.id}`);
-    const { users } = await fetchWithToken(`message/members/${group.id}`);
-    dispatch({ type: types.groupLoaded, payload: group });
-    dispatch({ type: types.messagesLoaded, payload: messages });
-    dispatch({ type: types.userMessagesLoaded, payload: users });
-  }, [id, dispatch]);
+    if (group) {
+      const { messages } = await fetchWithToken(`message/${group.id}`);
+      const { users } = await fetchWithToken(`message/members/${group.id}`);
+      dispatch({ type: types.groupLoaded, payload: group });
+      dispatch({ type: types.messagesLoaded, payload: messages });
+      dispatch({ type: types.userMessagesLoaded, payload: users });
+      socket?.emit("join-group", group.id);
+    }
+  }, [id, dispatch, socket]);
 
   const sendMessage = async () => {
     if (message.length === 0) return;
-    const resp = await fetchWithToken(
+    await fetchWithToken(
       "message",
       { text: message, groupId: group?.id },
       "POST"
     );
-    console.log(resp);
-    socket?.emit("send-message", { id: group?.id });
+    socket?.emit("send-message", group.id);
     setMessage("");
   };
 
@@ -87,7 +89,8 @@ export const GroupPage = () => {
 
   useEffect(() => {
     getMyGroup();
-  }, [getMyGroup]);
+    return () => socket?.emit("leave", group.id);
+  }, [getMyGroup, group.id, socket]);
 
   return (
     <main style={{ background: ready && group?.color ? group?.color : "" }}>
