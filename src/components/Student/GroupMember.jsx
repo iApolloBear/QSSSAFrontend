@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { baseUrl, fetchWithToken } from "../../helpers/fetch";
 import { AppContext } from "../../context/AppContext";
+import { AuthContext } from "../../context/AuthContext";
 import { SocketContext } from "../../context/SocketContext";
 
 export const GroupMember = ({ user }) => {
@@ -8,6 +9,9 @@ export const GroupMember = ({ user }) => {
   const {
     appState: { group },
   } = useContext(AppContext);
+  const {
+    auth: { uid },
+  } = useContext(AuthContext);
   const [comment, setComment] = useState("");
 
   const onChange = ({ target }) => setComment(target.value);
@@ -23,10 +27,35 @@ export const GroupMember = ({ user }) => {
     setComment("");
   };
 
+  const like = async () => {
+    await fetchWithToken(
+      "like",
+      {
+        answerId: user.Answer[0].id,
+      },
+      "POST"
+    );
+    socket?.emit("get-user-messages", group.id);
+  };
+
   return (
     <div className="card my-3">
       <div className="card-body">
-        <div className="card-title">{user.name}</div>
+        <div className="card-title d-flex align-items-center justify-content-between">
+          {user.name}
+          {user.Answer.length > 0 ? (
+            <button onClick={like} className="btn btn-primary btn-small">
+              {user.Answer[0].Like.some((like) => like.userId === uid) ? (
+                <i className="fas fa-thumbs-up"></i>
+              ) : (
+                <i className="far fa-thumbs-up"></i>
+              )}
+              {` ${user.Answer[0].Like.length}`}
+            </button>
+          ) : (
+            <></>
+          )}
+        </div>
         <div className="card-text">
           {user.Answer.length > 0 ? (
             <audio
