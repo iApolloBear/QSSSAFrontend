@@ -30,7 +30,7 @@ export const QSSSAS = () => {
                 </thead>
                 <tbody>
                   {qsssas.map((qsssa) => (
-                    <tr key={qsssa._id}>
+                    <tr key={qsssa.id}>
                       <td>{qsssa.topic}</td>
                       <td>{qsssa.question}</td>
                       {qsssa.sentenceStem ? (

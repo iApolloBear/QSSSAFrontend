@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { fetchWithoutToken } from "../../helpers/fetch";
+import { fetchWithToken } from "../../helpers/fetch";
 
 export const Students = () => {
   const [students, setStudents] = useState([]);
   const getStudents = useCallback(async () => {
-    const { students } = await fetchWithoutToken("admin/students");
+    const { students } = await fetchWithToken("admin/students");
     setStudents(students);
   }, []);
 
@@ -26,7 +26,7 @@ export const Students = () => {
             </thead>
             <tbody>
               {students.map((student) => (
-                <tr key={student._id}>
+                <tr key={student.id}>
                   <td>{student.name}</td>
                   {student.email ? <td>{student.email}</td> : <td>Guest</td>}
                 </tr>
