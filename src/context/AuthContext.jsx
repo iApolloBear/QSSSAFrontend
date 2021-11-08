@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
       const { user, token } = resp;
       localStorage.setItem("token", token);
       setAuth({
-        uid: user._id,
+        uid: user.id,
         name: user.name,
         checking: false,
         logged: true,
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
       const { token, user } = resp;
       localStorage.setItem("token", token);
       setAuth({
-        uid: user._id,
+        uid: user.id,
         name: user.name,
         checking: false,
         logged: true,

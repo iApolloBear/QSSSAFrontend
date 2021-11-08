@@ -10,7 +10,7 @@ export const GroupMembers = () => {
   return (
     <div className="row">
       <div className="col-md-12 col-lg-12">
-        {group.selected
+        {group.selectedId !== null
           ? userMessages?.map(({ user }) => (
               <GroupMember key={user.id} user={user} />
             ))

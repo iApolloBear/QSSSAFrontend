@@ -14,6 +14,7 @@ export const GroupPage = () => {
   const { id } = useParams();
   const [qsssa, setQSSSA] = useState({});
   const [ready, setReady] = useState(false);
+  const [disabled, setDisabled] = useState(true);
   const {
     auth: { name, uid },
   } = useContext(AuthContext);
@@ -62,6 +63,10 @@ export const GroupPage = () => {
       dispatch({ type: types.messagesLoaded, payload: messages });
       dispatch({ type: types.userMessagesLoaded, payload: users });
       socket?.emit("join-group", group.id);
+    } else {
+      dispatch({ type: types.groupLoaded, payload: {} });
+      dispatch({ type: types.messagesLoaded, payload: [] });
+      dispatch({ type: types.userMessagesLoaded, payload: [] });
     }
   }, [id, dispatch, socket]);
 
@@ -73,8 +78,31 @@ export const GroupPage = () => {
       "POST"
     );
     socket?.emit("send-message", group.id);
+    socket?.emit("reload-group", group.id);
+    socket?.emit("get-user-messages", group.id);
     setMessage("");
   };
+
+  const setUserReady = async () => {
+    await fetchWithToken("student/ready", {}, "PUT");
+    socket?.emit("ready", id);
+  };
+
+  useEffect(() => {
+    if (group.selectedId !== null) {
+      if (group.active === true) {
+        setDisabled(false);
+      } else {
+        if (group.selectedId === uid) {
+          setDisabled(false);
+        } else {
+          setDisabled(true);
+        }
+      }
+    } else {
+      setDisabled(false);
+    }
+  }, [group, setDisabled, uid]);
 
   useEffect(() => {
     joinRoom(id);
@@ -126,11 +154,11 @@ export const GroupPage = () => {
                         uid={uid}
                       />
                     )}
-                    {ready && group?.selected?.name ? (
+                    {ready && group?.selectedId !== null ? (
                       <h3 className="text-center my-5">
-                        {group.selected.name} will go first
+                        {group?.selected?.name} will go first
                       </h3>
-                    ) : ready && group ? (
+                    ) : ready && group?.identifier !== "" ? (
                       <h3 className="text-center my-5">
                         The student with the {group?.identifier} will go first
                       </h3>
@@ -203,7 +231,7 @@ export const GroupPage = () => {
                           <td>
                             <button
                               onClick={() => {
-                                socket.emit("ready", { uid });
+                                setUserReady();
                                 setReady(true);
                               }}
                               className="btn btn-small btn-primary"
@@ -222,11 +250,7 @@ export const GroupPage = () => {
                       placeholder="Enter your message"
                       className="form-control mb-0"
                       name="message"
-                      disabled={
-                        group?.active === false &&
-                        group?.selectedId !== uid &&
-                        group?.selectedId !== null
-                      }
+                      disabled={disabled}
                       value={message}
                       onChange={onChange}
                     />
