@@ -24,6 +24,7 @@ export const GroupMember = ({ user }) => {
       "POST"
     );
     socket?.emit("get-user-messages", group.id);
+    socket?.emit("reload-group", group.id);
     setComment("");
   };
 
@@ -36,6 +37,7 @@ export const GroupMember = ({ user }) => {
       "POST"
     );
     socket?.emit("get-user-messages", group.id);
+    socket?.emit("reload-group", group.id);
   };
 
   return (

@@ -58,17 +58,23 @@ export const useSocket = (serverPath) => {
     });
   }, [socket, dispatch]);
 
-  //useEffect(() => {
-  //socket?.on("get-qsssa", (qsssa) => {
-  //qsssaDispatch({ type: types.qsssaLoaded, payload: qsssa });
-  //});
-  //}, [socket, qsssaDispatch]);
-
   useEffect(() => {
     socket?.on("get-my-group", async (id) => {
       const { group } = await fetchWithToken(`student/my-group/${id}`);
       socket?.emit("join-group", id);
       dispatch({ type: types.groupLoaded, payload: group });
+    });
+  }, [socket, dispatch]);
+
+  useEffect(() => {
+    socket?.on("my-group", (group) => {
+      dispatch({ type: types.groupLoaded, payload: group });
+    });
+  }, [socket, dispatch]);
+
+  useEffect(() => {
+    socket?.on("teacher-groups", (groups) => {
+      dispatch({ type: types.groupsLoaded, payload: groups });
     });
   }, [socket, dispatch]);
 

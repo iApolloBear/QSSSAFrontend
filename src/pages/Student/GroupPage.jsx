@@ -34,6 +34,8 @@ export const GroupPage = () => {
     formData.append("groupId", group?.id);
     await fetchWithToken("answer", formData, "POST", true);
     socket?.emit("get-user-messages", group.id);
+    socket?.emit("reload-group", group.id);
+    socket?.emit("get-teacher-groups", id);
   };
 
   const onChange = ({ target }) => setMessage(target.value);
