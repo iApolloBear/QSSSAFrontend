@@ -1,6 +1,7 @@
 import { useEffect, useCallback, useState, useContext } from "react";
+import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { fetchWithToken } from "../../helpers/fetch";
+import { fetchWithToken, baseUrl } from "../../helpers/fetch";
 import { CreateGroupModal } from "../../components/Teacher/CreateGroupModal";
 import { types } from "../../types/types";
 import { SocketContext } from "../../context/SocketContext";
@@ -11,7 +12,7 @@ export const StudentListPage = () => {
   const [qsssa, setQSSSA] = useState({});
   const [show, setShow] = useState(false);
   const {
-    appState: { students },
+    appState: { students, groups },
     dispatch,
   } = useContext(AppContext);
   const { socket } = useContext(SocketContext);
@@ -23,6 +24,14 @@ export const StudentListPage = () => {
     const { qsssa } = await fetchWithToken(`qsssa/${id}`);
     setQSSSA(qsssa);
   }, []);
+
+  const getGroups = useCallback(
+    async (id) => {
+      const { groups } = await fetchWithToken(`group/${id}`);
+      dispatch({ type: types.groupsLoaded, payload: groups });
+    },
+    [dispatch]
+  );
 
   const joinRoom = useCallback(
     (id) => {
@@ -52,6 +61,10 @@ export const StudentListPage = () => {
     getStudents(id);
   }, [getStudents, id]);
 
+  useEffect(() => {
+    getGroups(id);
+  }, [getGroups, id]);
+
   return (
     <main>
       <div className="container">
@@ -76,13 +89,15 @@ export const StudentListPage = () => {
                 </div>
               </div>
               <div className="text-center mt-4">
-                <button
-                  onClick={handleShow}
-                  type="button"
-                  className="btn btn-secondary"
-                >
-                  Click to create group
-                </button>
+                {qsssa?.UserGroup?.length === 0 && (
+                  <button
+                    onClick={handleShow}
+                    type="button"
+                    className="btn btn-secondary"
+                  >
+                    Click to create group
+                  </button>
+                )}
                 <CreateGroupModal
                   onlyRecording={qsssa.qsssa?.onlyRecording}
                   id={id}
@@ -92,6 +107,50 @@ export const StudentListPage = () => {
               </div>
             </div>
           </div>
+        </div>
+        <div className="row">
+          {groups?.map((group) => (
+            <div key={group.id} className="col-md-6 col-lg-6">
+              <div className="form-main multi-group">
+                <div style={{ background: group.color }} className="form-wrap">
+                  <Link className="h5">{group.name}</Link>
+                  <div className="inner-box">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Student Name:</th>
+                          <th>Record Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {group.UsersOnGroups.map(({ user }) => (
+                          <tr key={user.id}>
+                            <td>{user.name}</td>
+                            <td>
+                              {user.Answer.length > 0 ? (
+                                user.Answer.map((answer) => (
+                                  <audio
+                                    key={answer.id}
+                                    src={`${baseUrl}/upload/answers/${answer.id}`}
+                                    controls
+                                  ></audio>
+                                ))
+                              ) : (
+                                <>
+                                  <i className="far fa-play-circle"></i>
+                                  Pending
+                                </>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </main>
