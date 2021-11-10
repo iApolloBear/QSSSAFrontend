@@ -9,6 +9,7 @@ const initialState = {
   userMessages: [],
   groups: [],
   group: {},
+  qsssa: {},
 };
 
 export const AppProvider = ({ children }) => {

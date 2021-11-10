@@ -9,10 +9,9 @@ import { AppContext } from "../../context/AppContext";
 
 export const StudentListPage = () => {
   const { id } = useParams();
-  const [qsssa, setQSSSA] = useState({});
   const [show, setShow] = useState(false);
   const {
-    appState: { students, groups },
+    appState: { students, groups, qsssa },
     dispatch,
   } = useContext(AppContext);
   const { socket } = useContext(SocketContext);
@@ -20,14 +19,17 @@ export const StudentListPage = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const getQSSSA = useCallback(async (id) => {
-    const { qsssa } = await fetchWithToken(`qsssa/${id}`);
-    setQSSSA(qsssa);
-  }, []);
+  const getQSSSA = useCallback(
+    async (id) => {
+      const { qsssa } = await fetchWithToken(`qsssa/${id}`);
+      dispatch({ type: types.qsssaLoaded, payload: qsssa });
+    },
+    [dispatch]
+  );
 
   const getGroups = useCallback(
     async (id) => {
-      const { groups } = await fetchWithToken(`group/${id}`);
+      const { groups } = await fetchWithToken(`group/qsssa/${id}`);
       dispatch({ type: types.groupsLoaded, payload: groups });
     },
     [dispatch]
@@ -113,7 +115,15 @@ export const StudentListPage = () => {
             <div key={group.id} className="col-md-6 col-lg-6">
               <div className="form-main multi-group">
                 <div style={{ background: group.color }} className="form-wrap">
-                  <Link className="h5">{group.name}</Link>
+                  <div className="d-flex justify-content-between align-items-center my-4">
+                    <h2 className="h5">{group.name}</h2>
+                    <Link
+                      to={`/group/${group.id}`}
+                      className="btn btn-primary btn-small"
+                    >
+                      View Details
+                    </Link>
+                  </div>
                   <div className="inner-box">
                     <table>
                       <thead>
