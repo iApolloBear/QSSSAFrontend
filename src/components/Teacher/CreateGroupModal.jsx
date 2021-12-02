@@ -1,20 +1,17 @@
 import { useState, useContext, useCallback } from "react";
 import { Modal } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
 import { SocketContext } from "../../context/SocketContext";
 import { fetchWithToken } from "../../helpers/fetch";
 import { AppContext } from "../../context/AppContext";
 import { types } from "../../types/types";
 
 export const CreateGroupModal = ({ show, handleClose, id, onlyRecordings }) => {
-  const history = useHistory();
   const [groups, setGroups] = useState([]);
   const [option, setOption] = useState("random");
   const [identifier, setIdentifier] = useState("");
   const [customIdentifier, setCustomIdentifier] = useState("");
   const { socket } = useContext(SocketContext);
   const {
-    appState: { group },
     dispatch,
   } = useContext(AppContext);
 
