@@ -70,13 +70,13 @@ export const GroupPage = () => {
         dispatch({ type: types.userMessagesLoaded, payload: [] });
       }
     },
-    [dispatch, id]
+    [dispatch]
   );
 
   useEffect(() => {
     joinRoom(id);
     return () => socket?.emit("leave", id);
-  }, [joinRoom, socket]);
+  }, [joinRoom, socket, id]);
 
   useEffect(() => {
     getGroup(id);

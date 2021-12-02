@@ -8,7 +8,7 @@ import { useHistory } from "react-router-dom";
 const schema = yup.object().shape({
   topic: yup.string().required(),
   question: yup.string().required(),
-  onlyRecording: yup.boolean().required(),
+  onlyRecordings: yup.boolean().required(),
 });
 
 export const QSSSAForm = () => {
@@ -69,11 +69,11 @@ export const QSSSAForm = () => {
             <input
               className="form-check-input"
               type="checkbox"
-              id="onlyRecording"
+              id="onlyRecordings"
               placeholder="Enter your Sentence Stem"
-              {...register("onlyRecording")}
+              {...register("onlyRecordings")}
             />
-            <label className="form-check-label" htmlFor="onlyRecording">
+            <label className="form-check-label" htmlFor="onlyRecordings">
               Recording audio only
             </label>
           </div>

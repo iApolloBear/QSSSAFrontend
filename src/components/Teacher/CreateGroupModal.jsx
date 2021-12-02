@@ -1,16 +1,22 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useCallback } from "react";
 import { Modal } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { SocketContext } from "../../context/SocketContext";
-import { fetchWithoutToken } from "../../helpers/fetch";
+import { fetchWithToken } from "../../helpers/fetch";
+import { AppContext } from "../../context/AppContext";
+import { types } from "../../types/types";
 
-export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
+export const CreateGroupModal = ({ show, handleClose, id, onlyRecordings }) => {
   const history = useHistory();
   const [groups, setGroups] = useState([]);
   const [option, setOption] = useState("random");
   const [identifier, setIdentifier] = useState("");
   const [customIdentifier, setCustomIdentifier] = useState("");
   const { socket } = useContext(SocketContext);
+  const {
+    appState: { group },
+    dispatch,
+  } = useContext(AppContext);
 
   const onChange = ({ target }) => setOption(target.id);
 
@@ -35,6 +41,14 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
     setCustomIdentifier(target.value);
   };
 
+  const getGroups = useCallback(
+    async (id) => {
+      const { groups } = await fetchWithToken(`group/qsssa/${id}`);
+      dispatch({ type: types.groupsLoaded, payload: groups });
+    },
+    [dispatch]
+  );
+
   const onItemChange = (value, index) => {
     const newArr = [...groups];
     newArr[index] = value;
@@ -42,7 +56,7 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
   };
 
   const createGroups = async () => {
-    const resp = await fetchWithoutToken(
+    const resp = await fetchWithToken(
       "group",
       {
         code: id,
@@ -55,7 +69,8 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
     socket?.emit("get-groups", id);
 
     if (resp.ok) {
-      history.push(`/group/${id}`);
+      handleClose();
+      getGroups(id);
     }
   };
 
@@ -98,7 +113,7 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecording }) => {
                 onChange={(e) => onItemChange(e.target.value, i)}
               />
             ))}
-          {onlyRecording && (
+          {onlyRecordings && (
             <>
               <input className="my-2" type="checkbox" /> Allow students to know
               who is in their group before they record.

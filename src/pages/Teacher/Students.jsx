@@ -5,7 +5,6 @@ export const Students = () => {
   const [students, setStudents] = useState([]);
   const getStudents = useCallback(async () => {
     const { students } = await fetchWithToken("teacher/students");
-    console.log(students);
     setStudents(students);
   }, []);
 

@@ -89,11 +89,11 @@ export const GroupPage = () => {
   };
 
   useEffect(() => {
-    if (group.selectedId !== null) {
-      if (group.active === true) {
+    if (group?.selectedId !== null) {
+      if (group?.active === true) {
         setDisabled(false);
       } else {
-        if (group.selectedId === uid) {
+        if (group?.selectedId === uid) {
           setDisabled(false);
         } else {
           setDisabled(true);
@@ -119,8 +119,8 @@ export const GroupPage = () => {
 
   useEffect(() => {
     getMyGroup();
-    return () => socket?.emit("leave", group.id);
-  }, [getMyGroup, group.id, socket]);
+    return () => socket?.emit("leave", group?.id);
+  }, [getMyGroup, group?.id, socket]);
 
   return (
     <main style={{ background: ready && group?.color ? group?.color : "" }}>

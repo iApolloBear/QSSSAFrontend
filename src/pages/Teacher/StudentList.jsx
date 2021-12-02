@@ -22,6 +22,7 @@ export const StudentListPage = () => {
   const getQSSSA = useCallback(
     async (id) => {
       const { qsssa } = await fetchWithToken(`qsssa/${id}`);
+      console.log(qsssa);
       dispatch({ type: types.qsssaLoaded, payload: qsssa });
     },
     [dispatch]
@@ -91,7 +92,7 @@ export const StudentListPage = () => {
                 </div>
               </div>
               <div className="text-center mt-4">
-                {qsssa?.UserGroup?.length === 0 && (
+                {groups.length === 0 && (
                   <button
                     onClick={handleShow}
                     type="button"
@@ -101,7 +102,7 @@ export const StudentListPage = () => {
                   </button>
                 )}
                 <CreateGroupModal
-                  onlyRecording={qsssa.qsssa?.onlyRecording}
+                  onlyRecordings={qsssa?.onlyRecordings}
                   id={id}
                   show={show}
                   handleClose={handleClose}
