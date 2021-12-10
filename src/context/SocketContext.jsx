@@ -6,9 +6,8 @@ export const SocketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
   const { socket, online, connectSocket } = useSocket(
-    "https://qsssanew.vnddev.com/"
-    //"https://neo-qsssa.herokuapp.com/"
-    //"http://localhost:4000"
+    "https://neo-qsssa.herokuapp.com/"
+    //"https://localhost:4000"
   );
   const { auth } = useContext(AuthContext);
 

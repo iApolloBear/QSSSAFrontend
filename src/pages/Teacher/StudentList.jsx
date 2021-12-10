@@ -22,7 +22,6 @@ export const StudentListPage = () => {
   const getQSSSA = useCallback(
     async (id) => {
       const { qsssa } = await fetchWithToken(`qsssa/${id}`);
-      console.log(qsssa);
       dispatch({ type: types.qsssaLoaded, payload: qsssa });
     },
     [dispatch]
