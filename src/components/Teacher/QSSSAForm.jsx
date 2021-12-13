@@ -65,18 +65,11 @@ export const QSSSAForm = () => {
             placeholder="Enter your Sentence Stem"
             {...register("sentenceStem")}
           />
-          <div className="form-check">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="onlyRecordings"
-              placeholder="Enter your Sentence Stem"
-              {...register("onlyRecordings")}
-            />
-            <label className="form-check-label" htmlFor="onlyRecordings">
-              Recording audio only
-            </label>
-          </div>
+          <select className="form-select form-select-lg" {...register("type")}>
+            <option value="RECORDINGS">Only Recordings</option>
+            <option value="IN_PERSON">In Person</option>
+            <option value="CHAT">Chat Room</option>
+          </select>
           <label htmlFor="qsssa-image" className="btn mt-3 btn-primary">
             <input
               className="d-none"
