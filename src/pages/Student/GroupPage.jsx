@@ -90,7 +90,7 @@ export const GroupPage = () => {
   };
 
   useEffect(() => {
-    if (group?.selectedId !== null) {
+    if (group?.selectedId !== null && qsssa?.qsssa?.type === "IN_PERSON") {
       if (group?.active === true) {
         setDisabled(false);
       } else {
@@ -157,17 +157,20 @@ export const GroupPage = () => {
                         uid={uid}
                       />
                     )}
-                    {ready && group?.selectedId !== null ? (
-                      <h3 className="text-center my-5">
-                        {group?.selected?.name} will go first
-                      </h3>
-                    ) : ready && group?.identifier !== "" ? (
-                      <h3 className="text-center my-5">
-                        The student with the {group?.identifier} will go first
-                      </h3>
-                    ) : (
-                      <></>
-                    )}
+                    {ready &&
+                      group?.selectedId !== null &&
+                      qsssa?.qsssa?.type === "IN_PERSON" && (
+                        <h3 className="text-center my-5">
+                          {group?.selected?.name} will go first
+                        </h3>
+                      )}
+                    {ready &&
+                      group?.identifier !== "" &&
+                      qsssa?.qsssa?.type === "IN_PERSON" && (
+                        <h3 className="text-center my-5">
+                          The student with the {group?.identifier} will go first
+                        </h3>
+                      )}
                     {ready && group && (
                       <GroupMembers group={group} messages={messages} />
                     )}
