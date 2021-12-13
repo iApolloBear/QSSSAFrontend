@@ -19,6 +19,9 @@ export const appReducer = (state, action) => {
     case types.qsssaLoaded: {
       return { ...state, qsssa: action.payload };
     }
+    case types.membersLoaded: {
+      return { ...state, members: action.payload };
+    }
     default:
       return state;
   }

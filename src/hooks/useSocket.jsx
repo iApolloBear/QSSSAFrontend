@@ -69,6 +69,7 @@ export const useSocket = (serverPath) => {
   useEffect(() => {
     socket?.on("my-group", (group) => {
       dispatch({ type: types.groupLoaded, payload: group });
+      dispatch({ type: types.membersLoaded, payload: group.UsersOnGroups });
     });
   }, [socket, dispatch]);
 

@@ -5,4 +5,5 @@ export const types = {
   qsssaLoaded: "[QSSSA] QSSSA Loaded",
   groupLoaded: "[Group] Group Loaded",
   userMessagesLoaded: "[Meesages] User Messages Loaded",
+  membersLoaded: "[MEMBERS] Members Loaded",
 };

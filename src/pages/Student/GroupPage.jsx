@@ -158,19 +158,17 @@ export const GroupPage = () => {
                       />
                     )}
                     {ready &&
-                      group?.selectedId !== null &&
-                      qsssa?.qsssa?.type === "IN_PERSON" && (
+                      qsssa?.qsssa?.type === "IN_PERSON" &&
+                      (group?.selectedId !== null ? (
                         <h3 className="text-center my-5">
                           {group?.selected?.name} will go first
                         </h3>
-                      )}
-                    {ready &&
-                      group?.identifier !== "" &&
-                      qsssa?.qsssa?.type === "IN_PERSON" && (
+                      ) : (
                         <h3 className="text-center my-5">
                           The student with the {group?.identifier} will go first
                         </h3>
-                      )}
+                      ))}
+
                     {ready && group && (
                       <GroupMembers group={group} messages={messages} />
                     )}
@@ -186,7 +184,7 @@ export const GroupPage = () => {
                       <thead>
                         <tr>
                           <th>Student Name</th>
-                          {qsssa?.qsssa?.type !== "CHAT" && group.id && (
+                          {qsssa?.qsssa?.type !== "CHAT" && group?.id && (
                             <th>Record Status</th>
                           )}
                           <th></th>
@@ -218,6 +216,7 @@ export const GroupPage = () => {
                                         setAvailable(false);
                                         startRecording();
                                       }}
+                                      disabled={disabled}
                                       className="btn btn-small rec-button"
                                     >
                                       <span>
@@ -261,7 +260,6 @@ export const GroupPage = () => {
                         placeholder="Enter your message"
                         className="form-control mb-0"
                         name="message"
-                        disabled={disabled}
                         value={message}
                         onChange={onChange}
                       />

@@ -170,31 +170,31 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecordings }) => {
               </div>
             ))}
           {qsssa?.qsssa?.type === "IN_PERSON" && option === "identifiers" && (
-            <>
+            <input
+              className="form-control mx-4 my-3"
+              onChange={onChangeCustomIdentifier}
+              value={customIdentifier}
+              placeholder="Other"
+            />
+          )}
+          {qsssa?.qsssa?.type === "IN_PERSON" && (
+            <div className="form-check">
               <input
-                className="form-control mx-4 my-3"
-                onChange={onChangeCustomIdentifier}
-                value={customIdentifier}
-                placeholder="Other"
+                className="form-check-input"
+                type="radio"
+                name="flexRadioDefault"
+                id="random"
+                checked={option === "random"}
+                onChange={onChange}
               />
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="random"
-                  checked={option === "random"}
-                  onChange={onChange}
-                />
-                <label
-                  style={{ position: "relative", top: "4px" }}
-                  className="form-check-label"
-                  htmlFor="flexRadioDefault2"
-                >
-                  Randomly assign group member to speak first
-                </label>
-              </div>
-            </>
+              <label
+                style={{ position: "relative", top: "4px" }}
+                className="form-check-label"
+                htmlFor="flexRadioDefault2"
+              >
+                Randomly assign group member to speak first
+              </label>
+            </div>
           )}
         </div>
       </Modal.Body>

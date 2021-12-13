@@ -10,6 +10,7 @@ const initialState = {
   groups: [],
   group: {},
   qsssa: {},
+  members: [],
 };
 
 export const AppProvider = ({ children }) => {

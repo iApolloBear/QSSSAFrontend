@@ -4,7 +4,7 @@ import { GroupMember } from "./GroupMember";
 
 export const GroupMembers = () => {
   const {
-    appState: { userMessages, group, qsssa },
+    appState: { userMessages, group, qsssa, members },
   } = useContext(AppContext);
 
   return (
@@ -14,7 +14,9 @@ export const GroupMembers = () => {
           userMessages?.map(({ user }) => (
             <GroupMember key={user.id} user={user} />
           ))}
-        {qsssa.type !== "CHAT" &&
+        {qsssa.type === "IN_PERSON" &&
+          members.map(({ user }) => <GroupMember key={user.id} user={user} />)}
+        {qsssa.type === "RECORDINGS" &&
           group?.UsersOnGroups?.map(({ user }) => (
             <GroupMember key={user.id} user={user} />
           ))}
