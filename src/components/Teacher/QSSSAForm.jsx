@@ -8,7 +8,6 @@ import { useHistory } from "react-router-dom";
 const schema = yup.object().shape({
   topic: yup.string().required(),
   question: yup.string().required(),
-  onlyRecordings: yup.boolean().required(),
 });
 
 export const QSSSAForm = () => {

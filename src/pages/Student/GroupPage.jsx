@@ -44,6 +44,7 @@ export const GroupPage = () => {
 
   const getQSSSA = useCallback(async (id) => {
     const fetchQSSSA = await fetchWithToken(`qsssa/${id}`);
+    dispatch({ type: types.qsssaLoaded, payload: fetchQSSSA.qsssa });
     setQSSSA(fetchQSSSA);
   }, []);
 
@@ -139,7 +140,9 @@ export const GroupPage = () => {
                   <div className="questions-custom">
                     <p>While you are waiting think about this question: </p>
                     <h6>Question: {qsssa.qsssa?.question}</h6>
-                    <audio src={audioURL} controls />
+                    {qsssa?.qsssa?.type !== "CHAT" && (
+                      <audio src={audioURL} controls />
+                    )}
                     {qsssa.qsssa?.img && (
                       <img
                         className="img-fluid"
@@ -147,7 +150,7 @@ export const GroupPage = () => {
                         alt={`${qsssa}`}
                       />
                     )}
-                    {ready && group !== undefined && (
+                    {ready && group?.id && qsssa?.qsssa?.type === "CHAT" && (
                       <ChatBox
                         color={group?.color}
                         messages={messages}
@@ -180,54 +183,58 @@ export const GroupPage = () => {
                       <thead>
                         <tr>
                           <th>Student Name</th>
-                          <th>Record Status</th>
+                          {qsssa?.qsssa?.type !== "CHAT" && group.id && (
+                            <th>Record Status</th>
+                          )}
                           <th></th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
                           <td>{name}</td>
-                          <td>
-                            <span className="rec-main">
-                              {isRecording ? (
-                                <button
-                                  onClick={() => {
-                                    setAvailable(true);
-                                    stopRecording();
-                                  }}
-                                  className="btn btn-small rec-button"
-                                >
-                                  <span>
-                                    <i className="fas fa-microphone" />
-                                    Stop
-                                  </span>
-                                </button>
-                              ) : (
-                                <>
+                          {qsssa?.qsssa?.type !== "CHAT" && group.id && (
+                            <td>
+                              <span className="rec-main">
+                                {isRecording ? (
                                   <button
                                     onClick={() => {
-                                      setAvailable(false);
-                                      startRecording();
+                                      setAvailable(true);
+                                      stopRecording();
                                     }}
                                     className="btn btn-small rec-button"
                                   >
                                     <span>
                                       <i className="fas fa-microphone" />
-                                      Record
+                                      Stop
                                     </span>
                                   </button>
-                                </>
-                              )}
-                              {available && (
-                                <button
-                                  onClick={onSubmit}
-                                  className="btn btn-small btn-secondary"
-                                >
-                                  Submit
-                                </button>
-                              )}
-                            </span>
-                          </td>
+                                ) : (
+                                  <>
+                                    <button
+                                      onClick={() => {
+                                        setAvailable(false);
+                                        startRecording();
+                                      }}
+                                      className="btn btn-small rec-button"
+                                    >
+                                      <span>
+                                        <i className="fas fa-microphone" />
+                                        Record
+                                      </span>
+                                    </button>
+                                  </>
+                                )}
+                                {available && (
+                                  <button
+                                    onClick={onSubmit}
+                                    className="btn btn-small btn-secondary"
+                                  >
+                                    Submit
+                                  </button>
+                                )}
+                              </span>
+                            </td>
+                          )}
                           <td>
                             <button
                               onClick={() => {
@@ -244,44 +251,49 @@ export const GroupPage = () => {
                     </table>
                   </div>
 
-                  <div className="input-group mt-5">
-                    <input
-                      type="text"
-                      placeholder="Enter your message"
-                      className="form-control mb-0"
-                      name="message"
-                      disabled={disabled}
-                      value={message}
-                      onChange={onChange}
-                    />
-                    <div className="input group-append">
-                      <button
-                        type="button"
-                        className="code-button btn-small btn btn-primary"
-                        onClick={() => setEmoji(!emoji)}
-                        style={{ right: "15px" }}
-                      >
-                        {!emoji ? "\uD83D\uDE00" : "\u2715"}
-                      </button>
-                      <Picker
-                        pickerStyle={{
-                          position: "absolute",
-                          right: "0",
-                          bottom: "100%",
-                          zIndex: "9",
-                          display: emoji ? "flex" : "none",
-                        }}
-                        onEmojiClick={onEmojiClick}
+                  {qsssa?.qsssa?.type === "CHAT" && (
+                    <div className="input-group mt-5">
+                      <input
+                        type="text"
+                        placeholder="Enter your message"
+                        className="form-control mb-0"
+                        name="message"
+                        disabled={disabled}
+                        value={message}
+                        onChange={onChange}
                       />
-                      <button
-                        type="button"
-                        className="code-button btn-small btn btn-primary"
-                        onClick={sendMessage}
-                      >
-                        <i className="fa fa-paper-plane" aria-hidden="true"></i>
-                      </button>
+                      <div className="input group-append">
+                        <button
+                          type="button"
+                          className="code-button btn-small btn btn-primary"
+                          onClick={() => setEmoji(!emoji)}
+                          style={{ right: "15px" }}
+                        >
+                          {!emoji ? "\uD83D\uDE00" : "\u2715"}
+                        </button>
+                        <Picker
+                          pickerStyle={{
+                            position: "absolute",
+                            right: "0",
+                            bottom: "100%",
+                            zIndex: "9",
+                            display: emoji ? "flex" : "none",
+                          }}
+                          onEmojiClick={onEmojiClick}
+                        />
+                        <button
+                          type="button"
+                          className="code-button btn-small btn btn-primary"
+                          onClick={sendMessage}
+                        >
+                          <i
+                            className="fa fa-paper-plane"
+                            aria-hidden="true"
+                          ></i>
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>

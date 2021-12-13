@@ -7,7 +7,7 @@ import { SocketContext } from "../../context/SocketContext";
 export const GroupMember = ({ user }) => {
   const { socket } = useContext(SocketContext);
   const {
-    appState: { group },
+    appState: { group, qsssa },
   } = useContext(AppContext);
   const {
     auth: { uid },
@@ -58,18 +58,20 @@ export const GroupMember = ({ user }) => {
             <></>
           )}
         </div>
-        <div className="card-text">
-          {user.Answer.length > 0 ? (
-            <audio
-              src={`${baseUrl}/upload/answers/${user.Answer[0].id}`}
-              controls
-            ></audio>
-          ) : (
-            <>
-              <i className="far fa-play-circle"></i> Pending
-            </>
-          )}
-        </div>
+        {qsssa.type !== "CHAT" && (
+          <div className="card-text">
+            {user.Answer.length > 0 ? (
+              <audio
+                src={`${baseUrl}/upload/answers/${user.Answer[0].id}`}
+                controls
+              ></audio>
+            ) : (
+              <>
+                <i className="far fa-play-circle"></i> Pending
+              </>
+            )}
+          </div>
+        )}
       </div>
       {user.Answer.length > 0 && (
         <ul className="list-group list-group-flush">
