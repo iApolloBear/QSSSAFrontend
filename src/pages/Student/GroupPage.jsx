@@ -238,15 +238,19 @@ export const GroupPage = () => {
                             </td>
                           )}
                           <td>
-                            <button
-                              onClick={() => {
-                                setUserReady();
-                                setReady(true);
-                              }}
-                              className="btn btn-small btn-primary"
-                            >
-                              Ready to answer
-                            </button>
+                            {group?.id ? (
+                              <button
+                                onClick={() => {
+                                  setUserReady();
+                                  setReady(true);
+                                }}
+                                className="btn btn-small btn-primary"
+                              >
+                                Ready to answer
+                              </button>
+                            ) : (
+                              "please wait until teacher starts the class"
+                            )}
                           </td>
                         </tr>
                       </tbody>

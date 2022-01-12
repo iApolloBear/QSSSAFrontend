@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { fetchWithToken } from "../../helpers/fetch";
-import queryString from "query-string";
 
 const schema = yup.object().shape({
   code: yup.string().required().length(6),
@@ -20,7 +19,7 @@ export const CodeForm = () => {
     resolver: yupResolver(schema),
   });
   const [loading, setLoading] = useState(false);
-  const { code } = queryString.parse(window.location.search);
+  const [accessCode, setAccessCode] = useState("");
   const history = useHistory();
 
   const onSubmit = async ({ code }) => {
@@ -37,6 +36,14 @@ export const CodeForm = () => {
     setLoading(false);
   };
 
+  useEffect(() => {
+    const code = localStorage.getItem("code");
+    if (code) {
+      setAccessCode(code);
+    }
+    return () => localStorage.removeItem("code");
+  }, []);
+
   return (
     <>
       <div className="form-wrap">
@@ -48,7 +55,7 @@ export const CodeForm = () => {
                 type="text"
                 placeholder="Code"
                 className="form-control mb-0"
-                defaultValue={code}
+                defaultValue={accessCode}
                 {...register("code")}
               />
               <div className="input-group-append">

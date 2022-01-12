@@ -6,6 +6,7 @@ import { PublicRoutes } from "./PublicRoutes";
 import { TeacherRoutes } from "./TeacherRoutes";
 import { StudentRoutes } from "./StudentRoutes";
 import { Dashboard } from "../components/Layout/Dashboard/Dashboard";
+import queryString from "query-string";
 
 export const AppRouter = () => {
   const { auth, verifyToken } = useContext(AuthContext);
@@ -13,6 +14,15 @@ export const AppRouter = () => {
   useEffect(() => {
     verifyToken();
   }, [verifyToken]);
+
+  useEffect(() => {
+    const { code } = queryString.parse(window.location.search);
+    if (code) {
+      localStorage.setItem("code", code);
+    } else {
+      localStorage.removeItem("code");
+    }
+  }, []);
 
   if (auth.checking) {
     return <h1>Loading...</h1>;
