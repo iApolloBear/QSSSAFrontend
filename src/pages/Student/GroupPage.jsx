@@ -90,7 +90,7 @@ export const GroupPage = () => {
   };
 
   useEffect(() => {
-    if (group?.selectedId !== null && qsssa?.qsssa?.type === "IN_PERSON") {
+    if (group?.selectedId !== null && qsssa?.qsssa?.type !== "RECORDINGS") {
       if (group?.active === true) {
         setDisabled(false);
       } else {
@@ -123,6 +123,13 @@ export const GroupPage = () => {
     return () => socket?.emit("leave", group?.id);
   }, [getMyGroup, group?.id, socket]);
 
+  useEffect(() => {
+    return () => {
+      dispatch({ type: types.groupLoaded, payload: {} });
+      dispatch({ type: types.messagesLoaded, payload: [] });
+      dispatch({ type: types.userMessagesLoaded, payload: [] });
+    };
+  }, [dispatch]);
   return (
     <main style={{ background: ready && group?.color ? group?.color : "" }}>
       <div className="grp-main">
@@ -158,7 +165,7 @@ export const GroupPage = () => {
                       />
                     )}
                     {ready &&
-                      qsssa?.qsssa?.type === "IN_PERSON" &&
+                      qsssa?.qsssa?.type !== "RECORDINGS" &&
                       (group?.selectedId !== null ? (
                         <h3 className="text-center my-5">
                           {group?.selected?.name} will go first
@@ -265,6 +272,7 @@ export const GroupPage = () => {
                         className="form-control mb-0"
                         name="message"
                         value={message}
+                        disabled={disabled}
                         onChange={onChange}
                       />
                       <div className="input group-append">

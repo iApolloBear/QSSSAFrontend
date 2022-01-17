@@ -177,7 +177,7 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecordings }) => {
               placeholder="Other"
             />
           )}
-          {qsssa?.qsssa?.type === "IN_PERSON" && (
+          {qsssa?.qsssa?.type !== "RECORDINGS" && (
             <div className="form-check">
               <input
                 className="form-check-input"
@@ -193,6 +193,25 @@ export const CreateGroupModal = ({ show, handleClose, id, onlyRecordings }) => {
                 htmlFor="flexRadioDefault2"
               >
                 Randomly assign group member to speak first
+              </label>
+            </div>
+          )}
+          {qsssa?.qsssa?.type === "CHAT" && (
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="flexRadioDefault"
+                id="none"
+                checked={option === "none"}
+                onChange={onChange}
+              />
+              <label
+                style={{ position: "relative", top: "4px" }}
+                className="form-check-label"
+                htmlFor="flexRadioDefault2"
+              >
+                Don't Assign
               </label>
             </div>
           )}

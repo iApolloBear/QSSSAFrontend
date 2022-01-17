@@ -82,6 +82,14 @@ export const GroupPage = () => {
     getGroup(id);
   }, [getGroup, id]);
 
+  useEffect(() => {
+    return () => {
+      dispatch({ type: types.groupLoaded, payload: {} });
+      dispatch({ type: types.messagesLoaded, payload: [] });
+      dispatch({ type: types.userMessagesLoaded, payload: [] });
+    };
+  }, [dispatch]);
+
   return (
     <main style={{ background: group?.color ? group?.color : "" }}>
       <div className="grp-main">
